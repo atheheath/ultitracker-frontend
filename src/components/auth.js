@@ -64,14 +64,16 @@ class Auth {
             requestInit
         )
 
-        fetch(request)
-            .then((response) => response.text())
-            .then((json) => {
-                console.log("Gotcha");
-                window.location.reload(true);
-            }).catch((err) => {
-                console.log(err);
+        let result = fetch(request)
+            .then((response) => {
+                return response.ok;
             })
+            .catch((err) => {
+                console.log(err);
+                return false;
+            })
+
+        return result
     }
 
 }

@@ -2,7 +2,6 @@ import React from "react";
 import { LoginBox, loginMessage, RenewToken} from "../components/login.box";
 
 const loginFormId = "login";
-const cookieAuthenticationKey = "ultitracker-api-access-token";
 
 const LandingPage = (props) => {
     return (
@@ -12,7 +11,8 @@ const LandingPage = (props) => {
             {loginMessage(props)}
             <h1>Renew Token</h1>
             <RenewToken {...props} cookieAuthenticationKey={cookieAuthenticationKey}/>
-        </div>
+                <RenewToken {...props}/>
+            </div>
     )
 }
 

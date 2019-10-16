@@ -43,9 +43,9 @@ const LoginBox = (props) => {
         <div>
             <form action="http://localhost:5678/token" id={props.loginFormId} method="post">
                 <div>
-                    Username: <input name="username"></input>
+                    <input name="username" value="username"></input>
                     <br/>
-                    Password: <input name="password"></input>
+                    <input name="password" value="password"></input>
                     <br/>
                 </div>
             </form>
@@ -54,16 +54,6 @@ const LoginBox = (props) => {
     )
     
 }
-
-// const RenewToken = (props) => {
-//     return (
-//         <div>
-//             <form action="http://localhost:5678/renew_token" method="post">
-//                 <input type="submit" value="Renew Token"/>
-//             </form>
-//         </div>
-//     )
-// }
 
 const RenewToken = (props) => {
     return (
