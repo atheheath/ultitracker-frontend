@@ -1,0 +1,13 @@
+body {
+    background-image: url("../static/images/LandingPage.png");
+}
+
+#landing-page-content {
+    text-align: center;
+}
+
+h1 {
+    text-align: center;
+    margin: 0;
+    padding: 10px;
+}

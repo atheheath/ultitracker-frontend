@@ -6,7 +6,7 @@ import {
     Switch
 } from "react-router-dom"
 
-import './index.css';
+import './stylesheets/index.css';
 import LandingPage from "./pages/landing.page";
 import Protected from "./pages/protected";
 import ProtectedRoute from "./components/protected.route";
@@ -18,6 +18,8 @@ function App() {
     return (
         <div className="App">
             <Switch>
+                <Route 
+                    exact path="/" 
                     render={(props) => <LandingPage {...props} cookieAuthenticationKey={cookieAuthenticationKey}/>} 
                 />
                 <ProtectedRoute 
@@ -29,8 +31,6 @@ function App() {
                     path="*" 
                     component={() => "404 NOT FOUND"}
                 />
-                <ProtectedRoute exact path="/protected" component={Protected} />
-                <Route path="*" component={() => "404 NOT FOUND"}/>
             </Switch>
         </div>
     )

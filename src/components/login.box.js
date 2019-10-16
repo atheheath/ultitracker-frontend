@@ -1,5 +1,6 @@
 import React from 'react';
 import auth from './auth';
+import "../stylesheets/login.box.css";
 
 const isFromProtected = (props) => {
     if ("from" in props.location) {
@@ -23,7 +24,7 @@ const pushToHome = (props) => {
 
 const LoginButton = (props) => {
     return (
-        <div>
+        <div id="loginButton">
             <button 
                 onClick={() => {
                     auth.login(
@@ -40,7 +41,7 @@ const LoginButton = (props) => {
 
 const LoginBox = (props) => {
     return (
-        <div>
+        <div id="loginBox">
             <form action="http://localhost:5678/token" id={props.loginFormId} method="post">
                 <div>
                     <input name="username" value="username"></input>
@@ -57,7 +58,7 @@ const LoginBox = (props) => {
 
 const RenewToken = (props) => {
     return (
-        <div>
+        <div id="renewToken">
             <button 
                 onClick={() => {
                     auth.isAuthenticated(props, () => {pushToHome(props)})

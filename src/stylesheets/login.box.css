@@ -1,0 +1,33 @@
+#loginBox {
+    width: 20%;
+    display: inline-block;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    border: 1px solid black;
+}
+
+#loginBox form {
+    display: inline-block;
+}
+
+#loginBox form input {
+    margin-top: 0.5em;
+}
+
+#loginBox #loginButton {
+    margin-top: 1em;
+}
+
+#loginBox #loginButton button {
+    background-color: white;
+}
+
+#renewToken {
+    text-align: center;
+}
+
+#renewToken button {
+    background-color: white;
+}
