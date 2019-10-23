@@ -43,11 +43,11 @@ const LoginBox = (props) => {
     return (
         <div id="loginBox">
             <form action="http://localhost:5678/token" id={props.loginFormId} method="post">
-                <div>
-                    <input name="username" value="username"></input>
-                    <br/>
-                    <input name="password" value="password"></input>
-                    <br/>
+                <div id="loginBoxUsername">
+                    <input id="loginBoxUsernameInput" name="username" placeholder="username"></input>
+                </div>
+                <div id="loginBoxPassword">
+                    <input id="loginBoxPasswordInput" name="password" placeholder="password"></input>
                 </div>
             </form>
             <LoginButton {...props}/>
