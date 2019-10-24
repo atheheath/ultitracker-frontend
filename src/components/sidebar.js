@@ -6,24 +6,24 @@ class SidebarToggle extends React.Component {
     constructor(props) {
         super()
         this.state = {
-            buttonChar: "->",
-            open: 0
+            open: 0,
+            initialMargin: "-15vw"
         }
         this.toggle = this.toggle.bind(this);
     }
 
     toggle() {
         const newState = 1 - this.state.open;
-        const newWidth = (newState === 0) ? "-20%" : "0";
-        const newChar = (newState === 0) ? "->" : "<-";
+        const newWidth = (newState === 0) ? this.state.initialMargin : "0";
 
-        this.setState({open: newState, buttonChar: newChar})
+        this.setState({open: newState})
 
         document.getElementById("sidebar").style.marginLeft = newWidth;
+        document.getElementById("sidebarToggleButton").classList.toggle('rotated');
     }
 
     componentDidMount() {
-        document.getElementById("sidebar").style.marginLeft = "-20%";
+        document.getElementById("sidebar").style.marginLeft = this.state.initialMargin;
         document.getElementById("sidebarToggle").addEventListener("click", this.toggle, false);
     }
 
@@ -33,7 +33,10 @@ class SidebarToggle extends React.Component {
 
     render() {
         return (
-            <button id="sidebarToggle">{this.state.buttonChar}</button>
+            <div id="sidebarToggle">
+                <button id="sidebarToggleButton"/>
+            </div>
+            
         )
     }
 }

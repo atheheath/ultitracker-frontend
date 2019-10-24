@@ -1,8 +1,9 @@
 #sidebar {
     margin-top: 0;
     padding: 0;
-    width: 25%;
-    background-color: red;
+    width: 20vw;
+    min-width: 100px;
+    background-color: #989898;
     position: fixed;
     height: 100%;
     /* overflow: auto; */
@@ -13,6 +14,32 @@
 
 #sidebarToggle {
     float: right;
+    position: relative;
+    width: 5vw;
+    height: 2.5vw;
+    border: 0.5vmin solid rgba(0, 0, 0, 1.0);
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    outline: 0;
+}
+
+#sidebarToggleButton {
+    background-image: url("../static/images/rightArrow.png");
+    background-size: 100% 100%;
+    background-color: #989898;
+    transition: all 0.5s;
+    height: 80%;
+    width: 80%;
+    padding: 0;
+    margin: auto;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    border: 0;
+}
+
+#sidebarToggleButton.rotated {
+    transform: rotate(180deg);
 }
 
 #sidebar li {
