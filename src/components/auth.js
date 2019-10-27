@@ -26,6 +26,44 @@ function readCookie(cookieString, name) {
 	return null;
 }
 
+const urlencodeParams = (params) => {
+    var paramsArray = Array()
+
+    for (var key in params) {
+        paramsArray.push(key + "=" + params[key])
+    }
+
+    const encodedString = paramsArray.join("&");
+
+    return encodedString;
+}
+
+const constructLoginForm = (usernameInputId, passwordInputId) => {
+    var username = document.getElementById(usernameInputId).value;
+    var password = document.getElementById(passwordInputId).value;
+    var redirect_url = "http://localhost:3000/protected";
+
+    const formData = new FormData();
+    formData.append("username", username);
+    formData.append("password", password);
+    formData.append("redirect_url", redirect_url);
+
+    // return formData;
+    const request = new Request("http://localhost:3001/token", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: urlencodeParams({
+            username: username,
+            password: password,
+            redirect_url: redirect_url
+        })
+    });
+    return request;
+}
+
 class Auth {
 
     getAuthorizationHeader(props) {
@@ -39,12 +77,18 @@ class Auth {
         return myHeaders;
     }
 
-    login(loginForm, callback) {
+    async login(usernameInputId, passwordInputId, callback) {
         console.log("Submitting Form");
-        loginForm.submit();
-        console.log("Submitted Form");
-        console.log("Calling login form callback");
-        callback();
+        const request = constructLoginForm(usernameInputId, passwordInputId);
+        let result = fetch(request)
+            .then((response) => {
+                console.log("Received response");
+                return response.ok;
+            })
+            .then(() => {
+                console.log("Calling login form callback");
+                callback();
+            })
     }
     
     logout(callback) {
@@ -60,7 +104,7 @@ class Auth {
             credentials: "include"
         }
         const request = new Request(
-            "http://localhost:5678/renew_token",
+            "http://localhost:3001/renew_token",
             requestInit
         )
 

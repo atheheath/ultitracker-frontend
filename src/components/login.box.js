@@ -22,15 +22,28 @@ const pushToHome = (props) => {
     props.history.push("/");
 }
 
+const pushToProtected = (props) => {
+    props.history.push("/protected");
+}
+
+const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log("Login Submitted")
+}
+
 const LoginButton = (props) => {
     return (
         <div id="loginButton">
             <button 
                 onClick={() => {
                     auth.login(
-                        document.getElementById(props.loginFormId), 
-                        () => {pushToHome(props)}
-                    );
+                        props.usernameId,
+                        props.passwordId,
+                        () => {
+                            console.log("Executing login callback");
+                            pushToProtected(props);
+                        }
+                    )
                 }}
             >
                 Login
@@ -42,7 +55,13 @@ const LoginButton = (props) => {
 const LoginBox = (props) => {
     return (
         <div id="loginBox">
-            <form action="http://localhost:5678/token" id={props.loginFormId} method="post">
+            <form 
+                action="http://localhost:3001/token" 
+                id={props.loginFormId} 
+                method="post" 
+                onSubmit={handleSubmit}
+                required
+            >
                 <div id="loginBoxUsername">
                     <input id="loginBoxUsernameInput" name="username" placeholder="username"></input>
                 </div>
@@ -50,7 +69,7 @@ const LoginBox = (props) => {
                     <input id="loginBoxPasswordInput" name="password" placeholder="password"></input>
                 </div>
             </form>
-            <LoginButton {...props}/>
+            <LoginButton {...props} usernameId="loginBoxUsernameInput" passwordId="loginBoxPasswordInput"/>
         </div>
     )
     
