@@ -45,12 +45,10 @@ const Sidebar = (props) => {
     return (
         <div id="sidebar">
             <SidebarToggle/>
-            <header id="header">
-                <div id="img-placeholder">
-                    <a href="/">
-                        <img src="/"/>
-                    </a>
-                    <h1>Placeholder</h1>
+            <header id="sidebarHeader">
+                <div id="sidebarUserPlaceholder">
+                    <div id="sidebarUserImgPlaceholder"></div>
+                    <p>Placeholder</p>
                     <p>Some tagline</p>
                 </div>
                 <nav id="main-nav">
