@@ -56,17 +56,25 @@ const LoginBox = (props) => {
     return (
         <div id="loginBox">
             <form 
-                action="http://localhost:3001/token" 
-                id={props.loginFormId} 
+                id="loginBoxForm" 
                 method="post" 
                 onSubmit={handleSubmit}
                 required
             >
                 <div id="loginBoxUsername">
-                    <input id="loginBoxUsernameInput" name="username" placeholder="username"></input>
+                    <input 
+                        id="loginBoxUsernameInput" 
+                        name="username" 
+                        placeholder="username"
+                    ></input>
                 </div>
                 <div id="loginBoxPassword">
-                    <input id="loginBoxPasswordInput" name="password" placeholder="password"></input>
+                    <input 
+                        id="loginBoxPasswordInput" 
+                        name="password" 
+                        placeholder="password"
+                        type="password"
+                    ></input>
                 </div>
             </form>
             <LoginButton {...props} usernameId="loginBoxUsernameInput" passwordId="loginBoxPasswordInput"/>
