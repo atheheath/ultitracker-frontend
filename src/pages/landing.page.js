@@ -1,9 +1,8 @@
 import React from "react";
-import { LoginBox, loginMessage, RenewToken} from "../components/login.box";
+import { LoginBox, loginMessage, RenewToken } from "../components/login.box";
+import { AddUserBox, addUserMessage } from "../components/add.user.box";
 import { Sidebar } from "../components/sidebar";
 import "../stylesheets/landing.page.css"
-
-const loginFormId = "login";
 
 const LandingPage = (props) => {
     return (
@@ -11,8 +10,11 @@ const LandingPage = (props) => {
             <Sidebar />
             <div id="landing-page-content">
                 <h1>Ultitracker</h1>
-                <LoginBox {...props} loginFormId={loginFormId}/>
+                <LoginBox {...props}/>
                 {loginMessage(props)}
+                <h1>Add User</h1>
+                <AddUserBox {...props}/>
+                {addUserMessage(props)}
                 <h1>Renew Token</h1>
                 <RenewToken {...props}/>
             </div>

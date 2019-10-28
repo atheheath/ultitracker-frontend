@@ -26,6 +26,11 @@ function readCookie(cookieString, name) {
 	return null;
 }
 
+function UserException(message) {
+    this.message = message;
+    this.name = "UserException"
+}
+
 const urlencodeParams = (params) => {
     var paramsArray = Array()
 
@@ -41,14 +46,7 @@ const urlencodeParams = (params) => {
 const constructLoginForm = (usernameInputId, passwordInputId) => {
     var username = document.getElementById(usernameInputId).value;
     var password = document.getElementById(passwordInputId).value;
-    var redirect_url = "http://localhost:3000/protected";
 
-    const formData = new FormData();
-    formData.append("username", username);
-    formData.append("password", password);
-    formData.append("redirect_url", redirect_url);
-
-    // return formData;
     const request = new Request("http://localhost:3001/token", {
         method: "POST",
         credentials: "include",
@@ -57,8 +55,41 @@ const constructLoginForm = (usernameInputId, passwordInputId) => {
         },
         body: urlencodeParams({
             username: username,
+            password: password
+        })
+    });
+    return request;
+}
+
+const constructAddUserForm = (
+    usernameInputId, 
+    passwordInputId,
+    confirmPasswordInputId,
+    emailInputId,
+    fullNameInputId
+) => {
+
+    var username = document.getElementById(usernameInputId).value;
+    var password = document.getElementById(passwordInputId).value;
+    var confirmPassword = document.getElementById(confirmPasswordInputId).value;
+    var email = document.getElementById(emailInputId).value;
+    var fullName = document.getElementById(fullNameInputId).value;
+
+    if ( !(password === confirmPassword) ) {
+        throw new UserException("NonmatchingPasswords");
+    }
+
+    const request = new Request("http://localhost:3001/add_user", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: urlencodeParams({
+            username: username,
             password: password,
-            redirect_url: redirect_url
+            email: email,
+            full_name: fullName
         })
     });
     return request;
@@ -78,7 +109,7 @@ class Auth {
     }
 
     async login(usernameInputId, passwordInputId, callback) {
-        console.log("Submitting Form");
+        console.log("Submitting Login Form");
         const request = constructLoginForm(usernameInputId, passwordInputId);
         let result = fetch(request)
             .then((response) => {
@@ -91,6 +122,43 @@ class Auth {
             })
     }
     
+    async addUser(
+        usernameInputId, 
+        passwordInputId,
+        confirmPasswordInputId,
+        emailInputId,
+        fullNameInputId, 
+        callback) 
+    {
+        console.log("Submitting Add User Form");
+        try {
+            const request = constructAddUserForm(
+                usernameInputId, 
+                passwordInputId,
+                confirmPasswordInputId,
+                emailInputId,
+                fullNameInputId
+            );
+
+            let result = fetch(request)
+                .then((response) => {
+                    console.log("Received response");
+                    return response.ok;
+                })
+                .then(() => {
+                    console.log("Calling login form callback");
+                    callback();
+                })
+        }
+        catch(e) {
+            if ((e.name === "UserException") && (e.message === "NonmatchingPasswords")) {
+                console.log("Nonmatching passwords")
+            }
+            
+            console.error(e.message, e.name);
+        }
+    }
+
     logout(callback) {
         this.authenticated = false;
         callback();
