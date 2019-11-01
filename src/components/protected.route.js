@@ -5,12 +5,11 @@ import auth from './auth';
 
 class ProtectedRoute extends React.Component {
     constructor(props) {
-        super()
-        this.props = props;
+        super(props)
         this.state = {};
     }
     componentDidMount() {
-        let toRender = auth.isAuthenticated(this.props, () => {})
+        let toRender = auth.isAuthenticated(this.props.cookieAuthenticationKey)
             .then((result) => {
                 if (result) {
                     this.setState({value: <this.props.component {...this.props} />});

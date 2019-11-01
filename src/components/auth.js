@@ -97,11 +97,10 @@ const constructAddUserForm = (
 
 class Auth {
 
-    getAuthorizationHeader(props) {
+    getAuthorizationHeader(cookieAuthenticationKey) {
         var myHeaders = new Headers();
-        console.log("cookieAuthenticationKey: " + props.cookieAuthenticationKey)
         console.log("Document cookie: " + document.cookie);
-        const cookieValue = readCookie(document.cookie, props.cookieAuthenticationKey);
+        const cookieValue = readCookie(document.cookie, cookieAuthenticationKey);
         myHeaders.set("Authorization", "Bearer " + cookieValue);
         myHeaders.set("Accept", "Application/json");
         myHeaders.set("Credentials", "Include");
@@ -164,8 +163,8 @@ class Auth {
         callback();
     }
 
-    async isAuthenticated(props, callback) {
-        var headers = this.getAuthorizationHeader(props)
+    async isAuthenticated(cookieAuthenticationKey) {
+        var headers = this.getAuthorizationHeader(cookieAuthenticationKey)
         var requestInit = {
             method: "POST",
             headers: headers,
@@ -186,6 +185,11 @@ class Auth {
             })
 
         return result
+    }
+
+    redirectToHome(props) {
+        console.log("Redirected to Home, Please login")
+        props.history.push("/")
     }
 
 }

@@ -16,7 +16,7 @@ const LandingPage = (props) => {
                 <AddUserBox {...props}/>
                 {addUserMessage(props)}
                 <h1>Renew Token</h1>
-                <RenewToken {...props}/>
+                <RenewToken {...{cookieAuthenticationKey: props.cookieAuthenticationKey}}/>
             </div>
         </div>
     )

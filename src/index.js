@@ -10,6 +10,7 @@ import './stylesheets/index.css';
 import LandingPage from "./pages/landing.page";
 import Protected from "./pages/protected";
 import ProtectedRoute from "./components/protected.route";
+import Explorer from "./pages/explorer";
 import * as serviceWorker from './serviceWorker';
 
 const cookieAuthenticationKey = "ultitracker-api-access-token";
@@ -25,6 +26,11 @@ function App() {
                 <ProtectedRoute 
                     exact path="/protected" 
                     component={Protected}
+                    cookieAuthenticationKey={cookieAuthenticationKey}
+                />
+                <ProtectedRoute 
+                    exact path="/explorer" 
+                    component={Explorer}
                     cookieAuthenticationKey={cookieAuthenticationKey}
                 />
                 <Route 

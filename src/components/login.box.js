@@ -88,7 +88,7 @@ const RenewToken = (props) => {
         <div id="renewToken">
             <button 
                 onClick={() => {
-                    auth.isAuthenticated(props, () => {pushToHome(props)})
+                    auth.isAuthenticated(props.cookieAuthenticationKey)
                 }}
             >
                 Renew Token
