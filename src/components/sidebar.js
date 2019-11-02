@@ -54,7 +54,9 @@ const Sidebar = (props) => {
             <SidebarToggle/>
             <header id="sidebarHeader">
                 <div id="sidebarUserPlaceholder">
-                    <div id="sidebarUserImgPlaceholder"></div>
+                    <div id="sidebarUserImgPlaceholder">
+                        <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.shareicon.net%2Fdata%2F512x512%2F2015%2F10%2F02%2F649910_user_512x512.png&f=1&nofb=1" />
+                    </div>
                     <p>Placeholder</p>
                     <p>Some tagline</p>
                 </div>
