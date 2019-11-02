@@ -7,7 +7,6 @@ import "../stylesheets/landing.page.css"
 const LandingPage = (props) => {
     return (
         <div id="landing-page">
-            <Sidebar />
             <div id="landing-page-content">
                 <h1>Ultitracker</h1>
                 <LoginBox {...props}/>
