@@ -26,6 +26,10 @@ const pushToProtected = (props) => {
     props.history.push("/protected");
 }
 
+const pushToExplorer = (props) => {
+    props.history.push("/explorer");
+}
+
 const handleSubmit = (event) => {
     event.preventDefault();
     console.log("Login Submitted")
@@ -41,7 +45,7 @@ const LoginButton = (props) => {
                         props.passwordId,
                         () => {
                             console.log("Executing login callback");
-                            pushToProtected(props);
+                            pushToExplorer(props);
                         }
                     )
                 }}
