@@ -1,0 +1,31 @@
+html {
+    height: 100%;
+}
+body {
+    background-image: url("../static/images/LandingPage.png");
+    height: 100%;
+}
+
+#root {
+    height: 100%;
+}
+
+.App {
+    height: 100%;
+}
+
+#explorer { 
+    height: 100%;
+}
+
+#explorer-content {
+    text-align: center;
+    position: relative;
+    height: 100%;
+}
+
+h1 {
+    text-align: center;
+    margin: 0;
+    padding: 10px;
+}

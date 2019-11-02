@@ -51,11 +51,19 @@ async function getGameList(cookieAuthenticationKey) {
 
 const constructGameDiv = (gameData) => {
     return (
-        <div>
-            <p>{gameData.home + " vs. " + gameData.away}</p>
-            <img src={gameData.thumbnail}/>
-            <p>{"Date: " + gameData.date}</p>
-            <p>{"Length: " + gameData.length}</p>
+        <div className="gameDiv">
+            <div className="gameDivImg">
+                <img src={gameData.thumbnail}/>
+            </div>
+            <div className="gameDivDesc">
+                <table>
+                    <tr>
+                        <th>{gameData.home + " vs. " + gameData.away}</th>
+                    </tr>
+                    <tr><th>{"Date: " + gameData.date}</th></tr>
+                    <tr><th>{"Length: " + gameData.length}</th></tr>
+                </table>
+            </div>
         </div>
     )
 }
