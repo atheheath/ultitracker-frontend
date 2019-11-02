@@ -3,6 +3,8 @@ html {
 }
 body {
     background-image: url("../static/images/LandingPage.png");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     height: 100%;
 }
 
