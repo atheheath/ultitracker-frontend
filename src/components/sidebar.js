@@ -2,12 +2,18 @@ import React from "react";
 import { Link } from "react-router-dom"
 import "../stylesheets/sidebar.css"
 
+/* There's gotta be a better way to create this 
+arrow in the side bar. We have css between both the 
+css file and the javascript code, whereas it should be
+located in just one.*/
+
 class SidebarToggle extends React.Component {
     constructor(props) {
         super()
         this.state = {
             open: 0,
-            initialMargin: "-15vw"
+            initialMargin: "-17vw",
+            initialTransform: ""
         }
         this.toggle = this.toggle.bind(this);
     }
@@ -15,11 +21,12 @@ class SidebarToggle extends React.Component {
     toggle() {
         const newState = 1 - this.state.open;
         const newWidth = (newState === 0) ? this.state.initialMargin : "0";
+        const newTransform = (newState === 0) ? this.state.initialTransform : "rotate(-180deg)";
 
         this.setState({open: newState})
 
         document.getElementById("sidebar").style.marginLeft = newWidth;
-        document.getElementById("sidebarToggleButton").classList.toggle('rotated');
+        document.getElementById("sidebarToggleArrow").style.transform = newTransform;
     }
 
     componentDidMount() {
@@ -34,7 +41,7 @@ class SidebarToggle extends React.Component {
     render() {
         return (
             <div id="sidebarToggle">
-                <button id="sidebarToggleButton"/>
+                <img id="sidebarToggleArrow" src="http://www.stickpng.com/assets/images/585e4773cb11b227491c3385.png"/>
             </div>
             
         )

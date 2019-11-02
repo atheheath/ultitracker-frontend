@@ -15,31 +15,22 @@
 #sidebarToggle {
     float: right;
     position: relative;
-    width: 5vw;
+    width: 3vw;
     height: 2.5vw;
-    border: 0.5vmin solid rgba(0, 0, 0, 1.0);
     padding: 0;
     margin: 0 0 2vh 0;
     overflow: hidden;
     outline: 0;
 }
 
-#sidebarToggleButton {
-    background-image: url("../static/images/rightArrow.png");
-    background-size: 100% 100%;
-    background-color: #989898;
-    transition: all 0.5s;
-    height: 80%;
-    width: 80%;
-    padding: 0;
+#sidebarToggle img {
+    max-height: 100%;
+    max-width: 80%;
+    display: block;
     margin: auto;
     position: absolute;
     top: 0; left: 0; bottom: 0; right: 0;
-    border: 0;
-}
-
-#sidebarToggleButton.rotated {
-    transform: rotate(180deg);
+    transition: all 0.5s;
 }
 
 #sidebarUserPlaceholder {
