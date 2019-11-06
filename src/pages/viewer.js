@@ -3,7 +3,7 @@ import { Sidebar } from "../components/sidebar";
 import auth from '../components/auth';
 import User from '../components/user';
 import { GameScrollList } from "../components/game.scroll";
-import "../stylesheets/explorer.css";
+import "../stylesheets/viewer.css";
 
 async function constructUserRequest(cookieAuthenticationKey) {
     var headers = auth.getAuthorizationHeader(cookieAuthenticationKey)
@@ -103,7 +103,7 @@ class UserInfo extends React.Component {
 
 
 const Viewer = (props) => {
-    const gameId = props.match.params.gameId
+    const gameId = props.computedMatch.params.gameId
     console.log("Viewer GameId: " + gameId)
     console.log("Viewer cak: " + props.cookieAuthenticationKey)
     return (
