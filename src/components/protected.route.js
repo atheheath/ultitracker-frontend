@@ -47,7 +47,7 @@ class ProtectedRoute extends React.Component {
 
     render() {
         return (
-            <Route>
+            <Route {...this.props}>
                 {this.toRender()}
             </Route> 
         )
