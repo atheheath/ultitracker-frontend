@@ -4,36 +4,55 @@ import { Route, Redirect } from "react-router-dom";
 import auth from './auth';
 
 class ProtectedRoute extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {};
+    constructor({component: Component, cookieAuthenticationKey, ...rest}) {
+        super(rest)
+        this.state = {isAuthenticated: null}
+        this.component = Component
+        this.cookieAuthenticationKey = cookieAuthenticationKey
+        this.toRender = this.toRender.bind(this)
     }
-    componentDidMount() {
-        let toRender = auth.isAuthenticated(this.props.cookieAuthenticationKey)
-            .then((result) => {
-                if (result) {
-                    this.setState({value: <this.props.component {...this.props} />});
-                } else {
-                    this.setState({value: "NOT AUTHENTICATED"})
-                    // return <Redirect 
-                    //     to={
-                    //         {
-                    //             pathname: "/",
-                    //             from: props.location
-                    //         }
-                    //     }
-                    // />
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-            })
+
+    async componentWillMount() {
+        const result = await auth.isAuthenticated(this.cookieAuthenticationKey)
+        console.log("result: " + result)
+        this.setState({isAuthenticated: result})
+    }
+
+    toRender() {
+        console.log("Rendering, this.state.authenticated: " + this.state.isAuthenticated)
+        if (this.state.isAuthenticated == null) {
+            return (
+                <Route>
+                    <div></div>
+                </Route>
+            )
+        }
+        else if (this.state.isAuthenticated) {
+            return (
+                <Route>
+                    <this.component {...this.props} />
+                </Route>
+            )
+        } else {
+            return (
+                <Route>
+                    <Redirect to={{
+                        pathname: "/",
+                        state: {from: this.props.location}
+                    }}/>
+                </Route>
+            )
+        }
     }
 
     render() {
-        if (!this.state.value) return null
-        return <div>{this.state.value}</div>
+        return (
+            <Route>
+                {this.toRender()}
+            </Route> 
+        )
     }
 }
+
 
 export default ProtectedRoute;
