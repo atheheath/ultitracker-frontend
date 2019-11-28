@@ -3,14 +3,16 @@ import ReactDOM from 'react-dom';
 import {
     BrowserRouter,
     Route,
-    Switch
+    Switch,
+    withRouter
 } from "react-router-dom"
 
 import './stylesheets/index.css';
 import LandingPage from "./pages/landing.page";
 import Protected from "./pages/protected";
-import ProtectedRoute from "./components/protected.route";
+import ProtectedComponent from "./components/protected.component";
 import Explorer from "./pages/explorer";
+import Viewer from "./pages/viewer";
 import * as serviceWorker from './serviceWorker';
 
 const cookieAuthenticationKey = "ultitracker-api-access-token";
@@ -21,17 +23,41 @@ function App() {
             <Switch>
                 <Route 
                     exact path="/" 
-                    render={(props) => <LandingPage {...props} cookieAuthenticationKey={cookieAuthenticationKey}/>} 
+                    render={(props) => 
+                        <LandingPage 
+                            {...props} 
+                            cookieAuthenticationKey={cookieAuthenticationKey}
+                        />
+                    } 
                 />
-                <ProtectedRoute 
-                    exact path="/protected" 
-                    component={Protected}
-                    cookieAuthenticationKey={cookieAuthenticationKey}
+                <Route
+                    exact path="/protected"
+                    render={(props) =>
+                        <ProtectedComponent
+                            {...props}
+                            component={withRouter(Protected)}
+                            cookieAuthenticationKey={cookieAuthenticationKey}
+                        />
+                    }
                 />
-                <ProtectedRoute 
-                    exact path="/explorer" 
-                    component={Explorer}
-                    cookieAuthenticationKey={cookieAuthenticationKey}
+                <Route
+                    exact path="/explorer"
+                    render={(props) =>
+                        <ProtectedComponent
+                            component={withRouter(Explorer)}
+                            cookieAuthenticationKey={cookieAuthenticationKey}
+                        />
+                    }
+                />
+                <Route
+                    path="/viewer/:gameId"
+                    render={(props) => 
+                        <ProtectedComponent
+                            {...props}
+                            component={withRouter(Viewer)}
+                            cookieAuthenticationKey={cookieAuthenticationKey}
+                        />
+                    }
                 />
                 <Route 
                     path="*" 

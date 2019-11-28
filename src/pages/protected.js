@@ -1,10 +1,13 @@
 import React from "react";
 import auth from '../components/auth';
+import {Link} from "react-router-dom";
 
-const Protected = () => {
+const Protected = (props) => {
     return (
         <div>
-            <h1>Protected</h1>
+            <Link to="/explorer">
+                <h1>Protected</h1>
+            </Link>
         </div>
     )
 }

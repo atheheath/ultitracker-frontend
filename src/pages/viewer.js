@@ -3,8 +3,7 @@ import { Sidebar } from "../components/sidebar";
 import auth from '../components/auth';
 import User from '../components/user';
 import { GameScrollList } from "../components/game.scroll";
-import { withRouter } from "react-router";
-import "../stylesheets/explorer.css";
+import "../stylesheets/viewer.css";
 
 async function constructUserRequest(cookieAuthenticationKey) {
     var headers = auth.getAuthorizationHeader(cookieAuthenticationKey)
@@ -103,34 +102,25 @@ class UserInfo extends React.Component {
 
 
 
-// const Explorer = (props) => {
-class Explorer extends React.Component {
-    constructor(props) {
-        super(props)
-        for (let x in props) {
-            console.log("Explorer props: ")
-            console.log(props)
-        }
-
-        console.log("Explorer cak: " + this.props.cookieAuthenticationKey)
-    }
-
-    render() {
-        return (
-            <div id="explorer">
-                <Sidebar />
-                <div id="explorer-content">
-                    <h1>Explorer</h1>
-                    <UserInfo {...this.props}/>
-                    <GameScrollList {...this.props}/>
-                    {/* <LoginBox {...props} loginFormId={loginFormId}/> */}
-                    {/* {loginMessage(props)} */}
-                    {/* <h1>Renew Token</h1> */}
-                    {/* <RenewToken {...props}/> */}
-                </div>
+const Viewer = (props) => {
+    const gameId = props.match.params.gameId
+    console.log("Viewer GameId: " + gameId)
+    console.log("Viewer cak: " + props.cookieAuthenticationKey)
+    return (
+        <div id="viewer">
+            <Sidebar />
+            <div id="viewer-content">
+                <h1>Viewer</h1>
+                <h2>{gameId}</h2>
+                {/* <UserInfo {...props}/>
+                <GameScrollList {...props}/> */}
+                {/* <LoginBox {...props} loginFormId={loginFormId}/> */}
+                {/* {loginMessage(props)} */}
+                {/* <h1>Renew Token</h1> */}
+                {/* <RenewToken {...props}/> */}
             </div>
-        )
-    }
+        </div>
+    )
 }
 
-export default Explorer;
+export default Viewer;
