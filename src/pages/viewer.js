@@ -103,7 +103,7 @@ class UserInfo extends React.Component {
 
 
 const Viewer = (props) => {
-    const gameId = props.computedMatch.params.gameId
+    const gameId = props.match.params.gameId
     console.log("Viewer GameId: " + gameId)
     console.log("Viewer cak: " + props.cookieAuthenticationKey)
     return (

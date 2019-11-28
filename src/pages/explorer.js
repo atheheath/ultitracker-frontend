@@ -3,6 +3,7 @@ import { Sidebar } from "../components/sidebar";
 import auth from '../components/auth';
 import User from '../components/user';
 import { GameScrollList } from "../components/game.scroll";
+import { withRouter } from "react-router";
 import "../stylesheets/explorer.css";
 
 async function constructUserRequest(cookieAuthenticationKey) {
@@ -102,22 +103,34 @@ class UserInfo extends React.Component {
 
 
 
-const Explorer = (props) => {
-    console.log("Explorer cak: " + props.cookieAuthenticationKey)
-    return (
-        <div id="explorer">
-            <Sidebar />
-            <div id="explorer-content">
-                <h1>Explorer</h1>
-                <UserInfo {...props}/>
-                <GameScrollList {...props}/>
-                {/* <LoginBox {...props} loginFormId={loginFormId}/> */}
-                {/* {loginMessage(props)} */}
-                {/* <h1>Renew Token</h1> */}
-                {/* <RenewToken {...props}/> */}
+// const Explorer = (props) => {
+class Explorer extends React.Component {
+    constructor(props) {
+        super(props)
+        for (let x in props) {
+            console.log("Explorer props: ")
+            console.log(props)
+        }
+
+        console.log("Explorer cak: " + this.props.cookieAuthenticationKey)
+    }
+
+    render() {
+        return (
+            <div id="explorer">
+                <Sidebar />
+                <div id="explorer-content">
+                    <h1>Explorer</h1>
+                    <UserInfo {...this.props}/>
+                    <GameScrollList {...this.props}/>
+                    {/* <LoginBox {...props} loginFormId={loginFormId}/> */}
+                    {/* {loginMessage(props)} */}
+                    {/* <h1>Renew Token</h1> */}
+                    {/* <RenewToken {...props}/> */}
+                </div>
             </div>
-        </div>
-    )
+        )
+    }
 }
 
 export default Explorer;
