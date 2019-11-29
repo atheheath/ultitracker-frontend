@@ -1,3 +1,27 @@
 #viewer h2 {
     text-align: center;
 }
+
+#video-container {
+    min-width: 580px;
+    min-height: 270px;
+    max-width: 90vw;
+    max-height: 90vh;
+    width: 128vmin;
+    height: 64vmin;
+    /* display: flex;
+    flex-direction: column;
+    -ms-flex-direction: column; */
+    /* background: white; */
+    overflow: visible;
+    padding: 0;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+}
+
+#video-player {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
