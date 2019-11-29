@@ -112,6 +112,12 @@ const Viewer = (props) => {
             <div id="viewer-content">
                 <h1>Viewer</h1>
                 <h2>{gameId}</h2>
+                <div id="video-container">
+                    <video id="video-player" controls>
+                        <source src="https://ultitracker-videos.s3.amazonaws.com/Men's+Highlight+Reel--2019+National+Championships-zt8jq7EaWxw.mp4" type="video/mp4"/>
+                        Your browser does not support HTML5 video.
+                    </video>
+                </div>
                 {/* <UserInfo {...props}/>
                 <GameScrollList {...props}/> */}
                 {/* <LoginBox {...props} loginFormId={loginFormId}/> */}
