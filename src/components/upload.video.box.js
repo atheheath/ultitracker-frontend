@@ -2,6 +2,7 @@ import React from 'react';
 import "../stylesheets/upload.video.box.css";
 import { tsPropertySignature } from '@babel/types';
 
+import Auth from './auth';
 
 const handleSubmit = (event) => {
     event.preventDefault();
@@ -12,7 +13,7 @@ const handleSubmit = (event) => {
 
 class UploadVideoBoxToggle extends React.Component {
     constructor(props) {
-        super()
+        super(props)
         this.state = {
             open: 0,
             initialDisplay: "none",
@@ -43,10 +44,20 @@ class UploadVideoBoxToggle extends React.Component {
     
         let formData = new FormData();
     
+        formData.append("home", document.getElementById("uploadVideoBoxHomeTeamInput").value)
+        formData.append("away", document.getElementById("uploadVideoBoxAwayTeamInput").value)
+        formData.append("date", document.getElementById("uploadVideoBoxDateInput").value)
         formData.append("upload_file", selectedFile)
         
         var xhr = new XMLHttpRequest()
         xhr.open("POST", uri)
+        xhr.withCredentials = true
+
+        var headers = Auth.getAuthorizationHeader(this.props.cookieAuthenticationKey)
+        headers.forEach((value, key, parent) => {
+            xhr.setRequestHeader(key, value)
+        })
+
         xhr.onloadstart = function (e) {
             console.log("start")
         }
@@ -171,7 +182,7 @@ class UploadVideoBoxToggle extends React.Component {
 const UploadVideoBox = (props) => {
     return (
         <div id="uploadVideoBox">
-            <UploadVideoBoxToggle/>
+            <UploadVideoBoxToggle cookieAuthenticationKey={props.cookieAuthenticationKey}/>
         </div>
     )
 }

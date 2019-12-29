@@ -129,7 +129,7 @@ class Explorer extends React.Component {
                             </button>
                         </div>
                     </div>
-                    <UploadVideoBox />
+                    <UploadVideoBox cookieAuthenticationKey={this.props.cookieAuthenticationKey}/>
                     <GameScrollList {...this.props}/>
                     {/* <LoginBox {...props} loginFormId={loginFormId}/> */}
                     {/* {loginMessage(props)} */}
