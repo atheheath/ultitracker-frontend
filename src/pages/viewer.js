@@ -1,11 +1,24 @@
 import React from "react";
+import { Link } from "react-router-dom"
 import { Sidebar } from "../components/sidebar";
 import auth from '../components/auth';
 import User from '../components/user';
 import { GameScrollList } from "../components/game.scroll";
 import "../stylesheets/viewer.css";
 
-async function constructUserRequest(cookieAuthenticationKey) {
+const urlencodeParams = (params) => {
+    var paramsArray = Array()
+
+    for (var key in params) {
+        paramsArray.push(key + "=" + params[key])
+    }
+
+    const encodedString = paramsArray.join("&");
+
+    return encodedString;
+}
+
+async function getGameRequest(cookieAuthenticationKey, gameId) {
     var headers = auth.getAuthorizationHeader(cookieAuthenticationKey)
     var requestInit = {
         method: "GET",
@@ -13,11 +26,13 @@ async function constructUserRequest(cookieAuthenticationKey) {
         credentials: "include"
     }
     const request = new Request(
-        "http://localhost:3001/users/me",
+        "http://localhost:3001/get_game?" + urlencodeParams({
+            game_id: gameId
+        }),
         requestInit
     )
 
-    const user = await fetch(request)
+    const gameInfo = await fetch(request)
         .then((response) => {
             if (!response.ok) {
                 throw Error("Can't fetch: " + response)
@@ -25,106 +40,94 @@ async function constructUserRequest(cookieAuthenticationKey) {
             return response.json()
         })
         .then((payload) => {
-            const newUser = new User({
-                username: payload.username,
-                email: payload.email,
-                fullName: payload.full_name
-            })      
-            return newUser  
+            return payload
         })
         .catch((err) => {
             console.log(err);
             return false;
         })
 
-    return user
+    return gameInfo
 }
 
-async function getUser(cookieAuthenticationKey) {
-    
-    const isAuthenticated = await auth.isAuthenticated(cookieAuthenticationKey)
-    
-    if (!isAuthenticated) {
-        console.log("Not authenticated");
-        throw Error("Not authenticated");
-    }
-
-    console.log("Calling constructUserRequest")
-    const user = constructUserRequest(cookieAuthenticationKey)
-    
-    return user;
-}
-
-class UserInfo extends React.Component {
+class ViewerContent extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            username: null,
-            email: null,
-            fullName: null
+            gameInfo: {
+                data: {
+                    video: null
+                },
+                game_id: null
+            },
+            videoNotFound: false
         }
+
+        this.toggleContent = this.toggleContent.bind(this)
     }
 
     componentDidMount() {
-        console.log("userinfo cak: " + this.props.cookieAuthenticationKey)
-        getUser(this.props.cookieAuthenticationKey).then((user) => {
-            console.log("user: " + user)
-            this.setState({
-                username: user.username,
-                email: user.email,
-                fullName: user.fullName
-            })
-        })
+        console.log("ViewerContent has mounted")
+    }
+
+    componentWillUnmount() {
+    }
+
+    async componentDidMount() {
+        const gameInfo = await getGameRequest(
+            this.props.cookieAuthenticationKey, 
+            this.props.gameId
+        )
+
+        console.log("GameInfo:")
+        console.log(gameInfo)
+
+        if (!gameInfo) {
+            this.setState({videoNotFound: true})
+        } else {
+            this.setState({gameInfo: gameInfo})
+        }
+        
+    }
+
+    toggleContent() {
+        if (this.state.videoNotFound) {
+            return (
+                <div id="viewer-content">
+                    <h1>Viewer</h1>
+                    <h1>Video Not Found</h1>
+                    <h1><Link to="/explorer">Back to Game Explorer</Link></h1>
+                </div>
+            )
+        } else {
+            return (
+                <div id="viewer-content">
+                    <h1>Viewer</h1>
+                    <h2>GameId: {this.state.gameInfo.game_id}, Name: {this.state.gameInfo.data.name}</h2>
+                    <div id="video-container">
+                        <video id="video-player" controls>
+                            {(!this.state.gameInfo.data.video ? null : <source src={this.state.gameInfo.data.video} type="video/mp4"/>)}
+                            Your browser does not support HTML5 video.
+                    </video>
+                    </div>
+                </div>
+            )
+        }
     }
 
     render() {
-        return (
-            <div id="UserInfo">
-                <h1>User Info</h1>
-                <table align="center">
-                    <tr>
-                        <th>Username</th>
-                        <th>{this.state.username}</th>
-                    </tr>
-                    <tr>
-                        <th>E-mail</th>
-                        <th>{this.state.email}</th>
-                    </tr>
-                    <tr>
-                        <th>Full Name</th>
-                        <th>{this.state.fullName}</th>
-                    </tr>
-                </table>
-            </div>
-        )
+        return this.toggleContent()
     }
 }
 
-
-
 const Viewer = (props) => {
-    const gameId = props.match.params.gameId
-    console.log("Viewer GameId: " + gameId)
-    console.log("Viewer cak: " + props.cookieAuthenticationKey)
     return (
         <div id="viewer">
             <Sidebar />
-            <div id="viewer-content">
-                <h1>Viewer</h1>
-                <h2>{gameId}</h2>
-                <div id="video-container">
-                    <video id="video-player" controls>
-                        <source src="https://ultitracker-videos.s3.amazonaws.com/Men's+Highlight+Reel--2019+National+Championships-zt8jq7EaWxw.mp4" type="video/mp4"/>
-                        Your browser does not support HTML5 video.
-                    </video>
-                </div>
-                {/* <UserInfo {...props}/>
-                <GameScrollList {...props}/> */}
-                {/* <LoginBox {...props} loginFormId={loginFormId}/> */}
-                {/* {loginMessage(props)} */}
-                {/* <h1>Renew Token</h1> */}
-                {/* <RenewToken {...props}/> */}
-            </div>
+            <ViewerContent 
+                cookieAuthenticationKey={props.cookieAuthenticationKey}
+                gameId={props.match.params.gameId}
+            />
         </div>
     )
 }

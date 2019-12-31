@@ -44,6 +44,7 @@ class UploadVideoBoxToggle extends React.Component {
     
         let formData = new FormData();
     
+        formData.append("name", document.getElementById("uploadVideoBoxNameInput").value)
         formData.append("home", document.getElementById("uploadVideoBoxHomeTeamInput").value)
         formData.append("away", document.getElementById("uploadVideoBoxAwayTeamInput").value)
         formData.append("date", document.getElementById("uploadVideoBoxDateInput").value)
@@ -148,6 +149,13 @@ class UploadVideoBoxToggle extends React.Component {
                             id="uploadVideoBoxFileInput"
                             type="file"
                         />
+                    </div>
+                    <div id="uploadVideoBoxName">
+                        <input
+                            id="uploadVideoBoxNameInput"
+                            name="Name"
+                            placeholder="Name"
+                        ></input>
                     </div>
                     <div id="uploadVideoBoxHomeTeam">
                         <input 
