@@ -8,6 +8,7 @@
     height: 100%;
     overflow-x: hidden;
     transition: 0.5s;
+    display: block;
     z-index: 1; /* Stay on top */
 }
 

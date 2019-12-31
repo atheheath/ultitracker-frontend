@@ -5,6 +5,7 @@ import User from '../components/user';
 import { GameScrollList } from "../components/game.scroll";
 import { withRouter } from "react-router";
 import "../stylesheets/explorer.css";
+import { UploadVideoBox } from "../components/upload.video.box";
 
 async function constructUserRequest(cookieAuthenticationKey) {
     var headers = auth.getAuthorizationHeader(cookieAuthenticationKey)
@@ -103,7 +104,6 @@ class UserInfo extends React.Component {
 
 
 
-// const Explorer = (props) => {
 class Explorer extends React.Component {
     constructor(props) {
         super(props)
@@ -121,7 +121,15 @@ class Explorer extends React.Component {
                 <Sidebar />
                 <div id="explorer-content">
                     <h1>Explorer</h1>
-                    <UserInfo {...this.props}/>
+                    <div id="user-info-box">
+                        <UserInfo {...this.props}/>
+                        <div id="upload-video-container">
+                            <button id="upload-video-button">
+                                Upload Game
+                            </button>
+                        </div>
+                    </div>
+                    <UploadVideoBox cookieAuthenticationKey={this.props.cookieAuthenticationKey}/>
                     <GameScrollList {...this.props}/>
                     {/* <LoginBox {...props} loginFormId={loginFormId}/> */}
                     {/* {loginMessage(props)} */}

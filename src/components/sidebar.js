@@ -65,7 +65,6 @@ const Sidebar = (props) => {
                         <li><Link to="/">Landing Page</Link></li>
                         <li><Link to="/protected">Protected</Link></li>
                         <li><Link to="/explorer">Game Explorer</Link></li>
-                        <li><Link to="/viewer/00000001">Game Viewer</Link></li>
                         <li><Link to="/annotator">Annotator</Link></li>
                     </ul>
                 </nav>
