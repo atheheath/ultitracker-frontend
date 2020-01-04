@@ -36,7 +36,8 @@
 #annotator-content button {
     background-color: white;
     color: black;
-    -webkit-transition-duration: 0.2s; /* Safari */
+    -webkit-transition-duration: 0.2s;
+    /* Safari */
     transition-duration: 0.2s;
     border-radius: 4px;
     width: 20vw;
@@ -54,4 +55,4 @@
 #annotator-content button:hover {
     background-color: green;
     color: white;
-} 
+}
