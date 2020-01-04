@@ -13,6 +13,7 @@ import Protected from "./pages/protected";
 import ProtectedComponent from "./components/protected.component";
 import Explorer from "./pages/explorer";
 import Viewer from "./pages/viewer";
+import Annotator from "./pages/annotator";
 import * as serviceWorker from './serviceWorker';
 
 const cookieAuthenticationKey = "ultitracker-api-access-token";
@@ -55,6 +56,15 @@ function App() {
                         <ProtectedComponent
                             {...props}
                             component={withRouter(Viewer)}
+                            cookieAuthenticationKey={cookieAuthenticationKey}
+                        />
+                    }
+                />
+                <Route
+                    path="/annotator"
+                    render={(props) =>
+                        <ProtectedComponent
+                            component={withRouter(Annotator)}
                             cookieAuthenticationKey={cookieAuthenticationKey}
                         />
                     }

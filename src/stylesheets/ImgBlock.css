@@ -1,0 +1,28 @@
+.ImageContainer {
+  /* display: flex; */
+  /* flex-direction: column; */
+  /* width: 100vmin;  */
+  /* From 1920 / (1920 + 1080) * 100 * 1.5 */
+  width: 96vmin;
+  /* From 1080 / (1920 + 1080) * 100 * 1.5 */
+  height: 54vmin;
+  /* height: 100%; */
+  border: 1vmin solid green;
+  /* overflow: hidden; */
+  position: relative;
+  display: block;
+  margin: auto;
+  /* object-fit: contain; */
+  /* width: fit-content; */
+  /* height: fit-content; */
+  /* align-items: center;
+  justify-content: center; */
+  user-select: none;
+}
+
+.Canvas {
+  width: 96vmin;
+  height: 54vmin;
+  /* border: 1vmin solid red; */
+  /* overflow: hidden; */
+}

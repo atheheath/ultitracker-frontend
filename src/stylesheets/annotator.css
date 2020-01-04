@@ -1,0 +1,57 @@
+#annotator {
+    text-align: center;
+    width: 100%;
+    /* height: fit-content; */
+    min-height: 100%;
+    /* background-color: #09154e; */
+    /* align-items: center; */
+    /* justify-content: center; */
+    position: absolute;
+    font-size: calc(10px + 2vmin);
+    color: white;
+}
+
+#annotator-content {
+    padding-top: 100px;
+}
+
+/* check out this stuff https://stackoverflow.com/questions/9071830/contain-an-image-within-a-div */
+/* .Home-logo { */
+/* position: relative; */
+/* animation: Home-logo-spin infinite 20s linear; */
+/* width: 80%; */
+/* height: auto; */
+/* top: 50%; */
+/* left: 50%; */
+/* margin: auto; */
+/* object-fit: cover; */
+/* overflow: hidden; */
+/* display: block; */
+/* max-height: 100%; */
+/* max-width: 100%; */
+/* -ms-transform: translate(-50%, -50%); */
+/* transform: translate(-50%, -50%); */
+/* } */
+
+#annotator-content button {
+    background-color: white;
+    color: black;
+    -webkit-transition-duration: 0.2s; /* Safari */
+    transition-duration: 0.2s;
+    border-radius: 4px;
+    width: 20vw;
+    /* padding-left: 20vw; */
+    /* padding-right: 20vw; */
+    padding-top: 16px;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+    margin-right: 10vw;
+    margin-left: 10vw;
+    font-size: 16px;
+    display: inline-block;
+}
+
+#annotator-content button:hover {
+    background-color: green;
+    color: white;
+} 
