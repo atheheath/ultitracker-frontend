@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { imgRootPath, vizserverURI } from "../Consts";
+import "../stylesheets/ImgBlock.css"
 
 const eps = Number(0.1);
 
@@ -210,12 +211,12 @@ class ImgBlock extends Component {
 
     getMainImageContainer() {
         return document.getElementById(
-            this.props.prefix + "MainImageContainer"
+            "main-image-container"
         );
     }
 
     getCanvas() {
-        return document.getElementById(this.props.prefix + "Canvas");
+        return document.getElementById("canvas");
     }
 
     getCanvasRect() {
@@ -408,7 +409,7 @@ class ImgBlock extends Component {
         var canvas = this.getCanvas();
         var context = this.getCanvasContext();
         console.log("Image failed to load");
-        context.fillStyle = "white";
+        context.fillStyle = "black";
         context.font = "24px Arial";
         context.textAlign = "center";
         var centeredX = 0.5 * canvas.width;
@@ -777,75 +778,50 @@ class ImgBlock extends Component {
 
     render() {
         return (
-            <div
-                className={this.props.prefix + "ImageContainer"}
-                id={this.props.prefix + "MainImageContainer"}
-                style={{
-                    width: "96vmin",
-                    height: "54vmin",
-                    border: "1vmin solid green",
-                    position: "relative",
-                    display: "block",
-                    margin: "auto",
-                    userSelect: "none"
-                }}
-            >
-                {/* {this.loadingStatus()} */}
-                {/* Note the 480 x 270 is the 1920 * 1080 ratio */}
-                <canvas
-                    id={this.props.prefix + "Canvas"}
-                    className={this.props.prefix + "Canvas"}
-                    width="960"
-                    height="540"
-                    style={{
-                        width: "96vmin",
-                        height: "54vmin"
-                    }}
-                ></canvas>
-                <div className="hidden">
-                    {
-                        <img
-                            ref={this.props.prefix + "ImageToLoad"}
-                            style={{ display: "none" }}
-                            src={this.state.imgPath}
-                            onLoad={this.handleImageLoaded}
-                            onError={this.handleImageErrored}
-                        ></img>
-                    }
+            <div>
+                <div id="main-image-container">
+                    {/* {this.loadingStatus()} */}
+                    {/* Note the 480 x 270 is the 1920 * 1080 ratio */}
+                    <canvas
+                        id="canvas"
+                        className={this.props.prefix + "Canvas"}
+                        width="960"
+                        height="540"
+                    ></canvas>
+                    <div id="hidden-img-container">
+                        {
+                            <img
+                                ref={this.props.prefix + "ImageToLoad"}
+                                style={{ display: "none" }}
+                                src={this.state.imgPath}
+                                onLoad={this.handleImageLoaded}
+                                onError={this.handleImageErrored}
+                            ></img>
+                        }
+                    </div>
                 </div>
-                {
+                <div id="annotation-buttons-container">
                     <button
-                        className={this.props.prefix + "canvasExport"}
-                        style={{
-                            backgroundColor: "red"
-                        }}
+                        id="serialize-info-button"
                         onClick={this.serializeInfo}
                     >
                         Serialize
                     </button>
-                }
-                {
+            
                     <button
-                        className={this.props.prefix + "canvasExportPost"}
-                        style={{
-                            backgroundColor: "green"
-                        }}
+                        id="post-annotation-button"
                         onClick={this.postAnnotationAndGetNext}
                     >
                         PostAnnotation
                     </button>
-                }
-                {
+            
                     <button
-                        className={this.props.prefix + "canvasExportRefresh"}
-                        style={{
-                            backgroundColor: "white"
-                        }}
+                        id="refresh-interval-button"
                         onClick={this.refreshAnnotationInterval}
                     >
                         Refresh Interval
                     </button>
-                }
+                </div>
             </div>
         );
     }

@@ -99,28 +99,30 @@ class Annotator extends Component {
                 <Sidebar />
                 <h1>Annotator</h1>
                 <div id="annotator-content">
-                    <button
-                        // class="annotationButton"
-                        onClick={this.loadPlayerBbox}
-                    >
-                        Player Bbox
-                    </button>
-                    <button
-                        // class="annotationButton"
-                        onClick={this.loadFieldLines}
-                    >
-                        Field Lines
-                    </button>
-                    <button
-                        // class="annotationButton"
-                        onClick={this.loadGameplayState}
-                    >
-                        Gameplay State
-                    </button>
+                    <div id="annotator-content-buttons-container">
+                        <button
+                            // class="annotationButton"
+                            onClick={this.loadPlayerBbox}
+                        >
+                            Player Bbox
+                        </button>
+                        <button
+                            // class="annotationButton"
+                            onClick={this.loadFieldLines}
+                        >
+                            Field Lines
+                        </button>
+                        <button
+                            // class="annotationButton"
+                            onClick={this.loadGameplayState}
+                        >
+                            Gameplay State
+                        </button>
+                    </div>
                     {this.getImgBlock()}
                 </div>
-                <p>Annotation table is {this.state.annotation_table}</p>
-                <main>{this.props.children}</main>
+                <h1>Annotation table is {this.state.annotation_table}</h1>
+                {/* <main>{this.props.children}</main> */}
             </div>
         );
     }

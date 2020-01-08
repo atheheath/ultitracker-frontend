@@ -1,4 +1,4 @@
-.ImageContainer {
+#main-image-container {
     /* display: flex; */
     /* flex-direction: column; */
     /* width: 100vmin;  */
@@ -11,7 +11,9 @@
     /* overflow: hidden; */
     position: relative;
     display: block;
-    margin: auto;
+    /* margin: auto; */
+    margin-left: auto;
+    margin-right: auto;
     /* object-fit: contain; */
     /* width: fit-content; */
     /* height: fit-content; */
@@ -20,9 +22,55 @@
     user-select: none;
 }
 
-.Canvas {
+#canvas {
     width: 96vmin;
     height: 54vmin;
     /* border: 1vmin solid red; */
     /* overflow: hidden; */
+}
+
+#main-image-container button:hover {
+    background-color: black;
+    color: white;
+}
+
+#annotation-buttons-container {
+    width: 100vw;
+    max-height: 200px;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: visible;
+    text-align: center;
+}
+
+#annotation-buttons-container button {
+    -webkit-transition-duration: 0.2s;
+    /* Safari */
+    transition-duration: 0.2s;
+    border-radius: 4px;
+    max-width: 33vw;
+    max-height: 20vh;
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-right: 5%;
+    margin-left: 5%;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+#serialize-info-button {
+    background-color: red;
+}
+
+#post-annotation-button {
+    background-color: green;
+}
+
+#refresh-interval-button {
+    background-color: white;
 }
