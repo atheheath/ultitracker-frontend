@@ -57,6 +57,9 @@ class FieldLinesImgBlock extends ImgBlock {
         this.serializeInfo = this.serializeInfo.bind(this);
 
         this.removeEventListeners = this.removeEventListeners.bind(this);
+
+        this.generate_cell_name = this.generate_cell_name.bind(this);
+        this.generate_cell_style = this.generate_cell_style.bind(this);
     }
 
     pointInRect(point, rect) {
@@ -606,7 +609,7 @@ class FieldLinesImgBlock extends ImgBlock {
 
     drawImage(doLog = false) {
         super.drawImage();
-        this.drawLegend();
+        // this.drawLegend();
         // Draw line segments
         for (var segmentIndex in this.state.lineSegments) {
             var lseg = this.state.lineSegments[segmentIndex];
@@ -676,7 +679,7 @@ class FieldLinesImgBlock extends ImgBlock {
         console.log("-----serializeInfo() Start-----");
         console.log("rects: " + this.state.rects);
         var serializedPostData = {};
-        serializedPostData["image_id"] = this.state.imgId;
+        serializedPostData["img_id"] = this.state.imgId;
         serializedPostData["line_coords"] = [];
         for (var segmentIndex in this.state.lineSegments) {
             var lseg = this.state.lineSegments[segmentIndex];
@@ -729,6 +732,45 @@ class FieldLinesImgBlock extends ImgBlock {
             false
         );
     }
+
+    generate_cell_name(index) {
+        return fieldLinesNames[index] + " Key: " + (index + 1)
+    }
+
+    generate_cell_style(index) {
+        return {
+            backgroundColor: this.colors[index],
+            color: (index == 1 || index == 5) ? "white" : "black"
+        }
+    }
+
+    generate_cell(index) {
+        if (index == 0 || index == 5) {
+            return <td colspan="4" style={this.generate_cell_style(index)}>{this.generate_cell_name(index)}</td>    
+        } else {
+            return <td style={this.generate_cell_style(index)}>{this.generate_cell_name(index)}</td>
+        }
+    }
+
+    renderDescription() {
+        return (
+            <table>
+                <tr>
+                    {this.generate_cell(0)}
+                </tr>
+                <tr>
+                    {this.generate_cell(1)}
+                    {this.generate_cell(2)}
+                    {this.generate_cell(3)}
+                    {this.generate_cell(4)}
+                </tr>
+                <tr>
+                    {this.generate_cell(5)}
+                </tr>
+            </table>
+        )
+    }
+
 }
 
 export default FieldLinesImgBlock;

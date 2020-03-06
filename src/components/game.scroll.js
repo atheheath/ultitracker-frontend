@@ -111,4 +111,4 @@ class GameScrollList extends React.Component {
     }
 }
 
-export { GameScrollList };
+export { GameScrollList, getGameList };

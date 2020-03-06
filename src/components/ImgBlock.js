@@ -1,5 +1,7 @@
 import React, { Component } from "react";
-import { imgRootPath, vizserverURI } from "../Consts";
+import { fieldLinesNames, imgRootPath, vizserverURI } from "../Consts";
+// import Auth from "./auth"
+import auth from './auth'
 import "../stylesheets/ImgBlock.css"
 
 const eps = Number(0.1);
@@ -38,7 +40,8 @@ class ImgBlock extends Component {
             y_center: 0.5,
             scale: 1,
             mouseIsOver: false,
-            isStale: false
+            isStale: false,
+            firstInitialized: true
             // imageToAnnotatePromise: this.getImageToAnnotate(this.props.annotation_table)
         };
 
@@ -69,7 +72,7 @@ class ImgBlock extends Component {
         this.scaleImageToCanvasY = this.scaleImageToCanvasY.bind(this);
 
         // this.serializeInfo = this.serializeInfo.bind(this);
-        this.getImageToAnnotate = this.getImageToAnnotate.bind(this);
+        this.getImagesToAnnotate = this.getImagesToAnnotate.bind(this);
         this.setNewImageState = this.setNewImageState.bind(this);
         this.setBlankImageState = this.setBlankImageState.bind(this);
         this.getServerTime = this.getServerTime.bind(this);
@@ -528,14 +531,47 @@ class ImgBlock extends Component {
         if (doLog) {
             console.log("-----drawImage() End-----");
         }
-        this.drawTimer();
+        // this.drawTimer();
     }
 
-    async getImageToAnnotate(table) {
-        var geturi =
-            vizserverURI + "/get_image_to_annotate?annotation_table=" + table;
-        log("geturi", geturi);
-        let response = await fetch(geturi);
+    async getImagesToAnnotate(game_ids, annotation_type, order_type) {
+        order_type = "random"
+        console.log("getting Images To annotate")
+        var uri =
+            vizserverURI + "/annotator/get_images_to_annotate";
+
+        let formData = new FormData()
+
+        formData.append("game_ids", game_ids.join(" "))
+        formData.append("annotation_type", annotation_type)
+        formData.append("order_type", order_type)
+
+        var headers = auth.getAuthorizationHeader(this.props.cookieAuthenticationKey)
+        var requestInit = {
+            method: "POST",
+            headers: headers,
+            credentials: "include",
+            body: formData
+        }
+
+        const request = new Request(
+            uri,
+            requestInit
+        )
+
+        console.log("ImgBlock: cookieAuthenticationKey: " + this.props.cookieAuthenticationKey)
+        console.log("ImgBlock: game_ids: " + game_ids.join(" "));
+        console.log("ImgBlock: annotation_type: " + annotation_type);
+        console.log("ImgBlock: order_type: " + order_type);
+
+        let response = await fetch(request)
+
+        // geturi += "game_ids=" + game_ids;
+        // geturi += "annotation_type=" + annotation_type;
+        // geturi += "order_type=" + order_type;
+        
+        // log("geturi", geturi);
+        // let response = await fetch(geturi);
         if (response.status == 200) {
             log("response status is 200");
             return response.json();
@@ -579,22 +615,41 @@ class ImgBlock extends Component {
     }
 
     async postAnnotation() {
-        var serializedPostData = this.serializeInfo();
         var posturi =
             vizserverURI +
-            "/insert_annotation?image_id=" +
+            "/annotator/insert_annotation?img_id=" +
             this.state.imgId +
             "&annotation_table=" +
             this.props.annotation_table;
 
-        let response = await fetch(posturi, {
-            method: "POST",
-            body: JSON.stringify(serializedPostData)
-        }).then(res => {
-            console.log("Request complete! response:", res);
-            return res;
-        });
+        var serializedPostData = this.serializeInfo();
 
+        if (serializedPostData === null) {
+            throw Error("Serialized data may not be null")
+        }
+        // let formData = new FormData()
+
+        // formData.append("game_ids", game_ids.join(" "))
+        // formData.append("annotation_type", annotation_type)
+        // formData.append("order_type", order_type)
+
+        var headers = auth.getAuthorizationHeader(this.props.cookieAuthenticationKey)
+        var requestInit = {
+            method: "POST",
+            headers: headers,
+            credentials: "include",
+            body: JSON.stringify(serializedPostData)
+        }
+
+        const request = new Request(
+            posturi,
+            requestInit
+        )
+        
+
+        console.log("Submitting request")
+        let response = await fetch(request)
+        console.log("Got response")
         if (response.status == 200) {
             return response.json();
         } else {
@@ -602,15 +657,19 @@ class ImgBlock extends Component {
         }
     }
 
-    setNewImageState({ image_path, image_id, annotation_expiration_utc_time }) {
-        const imgPath = imgRootPath + "/" + image_path;
-        log("image path, image_id", imgPath, image_id);
+    setNewImageState({ img_id, img_path, annotation_expiration_utc_time }) {
+        log("img_path, img_id", img_path, img_id);
 
-        const serverExpTime = new Date(annotation_expiration_utc_time);
-
+        log("annotation_expiration_utc_time", annotation_expiration_utc_time)
+        const date = new Date(annotation_expiration_utc_time);
+//         var serverExpTime = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
+//  date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+        var serverExpTime = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds())
+        log("serverExpTime", serverExpTime)
+ 
         this.setState({
-            imgPath: imgPath,
-            imgId: image_id,
+            imgPath: img_path,
+            imgId: img_id,
             annotationExpirationUTCTime: serverExpTime
         });
 
@@ -629,24 +688,30 @@ class ImgBlock extends Component {
         this.setState({ imgPath: "", imgId: "", isStale: true });
         clearInterval(this.timer);
         this.clearImage();
-        this.removeEventListeners();
+        // this.removeEventListeners();
         log("Event listeners removed");
     }
 
     getNextImage() {
         // Use this to use promises for loading images
-        var result = this.getImageToAnnotate(this.props.annotation_table)
+        var result = this.getImagesToAnnotate(
+            Array(this.props.game_id), 
+            this.props.annotation_table,
+            this.props.order_type
+        )
             .then(
-                imageToAnnotate => {
-                    log("imageToAnnotate", imageToAnnotate);
-                    this.setNewImageState(imageToAnnotate);
+                imagesToAnnotate => {
+                    log("imagesToAnnotate", imagesToAnnotate);
+                    this.setNewImageState(imagesToAnnotate.img_locations[0]);
                 },
                 error => {
-                    log("Error in fetching image to annotate");
-                    log("Error", error.message);
-                    this.setBlankImageState();
-                    this.setState({ errorCause: error.message });
-                }
+                    if (!this.state.firstInitialized) {
+                        log("Error in fetching image to annotate");
+                        log("Error", error.message);
+                        this.setBlankImageState();
+                        this.setState({ errorCause: error.message });
+                    }
+                }   
             )
             .catch(error => {
                 log("Error in setting new image state");
@@ -666,6 +731,7 @@ class ImgBlock extends Component {
                 this.setState(this.defaultState);
             })
             .catch(error => {
+                console.log(error)
                 if (error.response.status == 422) {
                     throw Error(
                         "Bad post submission for annotation: ",
@@ -676,15 +742,17 @@ class ImgBlock extends Component {
     }
 
     refreshImageState({ annotation_expiration_utc_time }) {
-        const serverExpTime = new Date(annotation_expiration_utc_time);
+        const serverExpTime = new Date.UTC(annotation_expiration_utc_time);
 
+        console.log("annotation_expiration_utc_time: " + annotation_expiration_utc_time)
+        console.log("serverExpTime: " + serverExpTime)
         this.setState({
             annotationExpirationUTCTime: serverExpTime
         });
 
         clearInterval(this.timer);
         this.timer = setInterval(() => {
-            var now = new Date();
+            var now = new Date().getUTCDate();
             var untilExpiration = this.state.annotationExpirationUTCTime - now;
             // this.setState({timeUntilExpiration: untilExpiration});
             this.timeUntilExpiration = untilExpiration;
@@ -748,24 +816,33 @@ class ImgBlock extends Component {
         this.removeEventListeners();
     }
 
-    shouldComponentUpdate() {
-        return !this.state.isStale;
-    }
+    // shouldComponentUpdate() {
+    //     return !this.state.isStale;
+    // }
+
     componentDidUpdate(prevProps) {
-        if (this.props.annotation_table != prevProps.annotation_table) {
+        if (this.props != prevProps) {
+            console.log("prevProps.game_id: + ", prevProps.game_id)    
             log("Updating?");
 
             // Use this to use promises for loading images
-            var result = this.getImageToAnnotate(this.props.annotation_table)
-                .then(imageToAnnotate => {
-                    this.setNewImageState(imageToAnnotate);
+            this.setState({firstInitialized: false})
+
+            var result = this.getImagesToAnnotate(
+                Array(this.props.game_id), 
+                this.props.annotation_table,
+                this.props.order_type
+            )
+                .then(imagesToAnnotate => {
+                    this.setNewImageState(imagesToAnnotate.img_locations[0]);
                 })
                 .catch(error => {
                     this.setBlankImageState();
                     this.setState({ errorCause: error });
                 });
+            log("Component updated");
         }
-        log("Component updated");
+        
     }
 
     loadingStatus() {
@@ -776,28 +853,62 @@ class ImgBlock extends Component {
         }
     }
 
+    // generate_cell(index) {
+    //     if (index == 0 || index == 5) {
+    //         return <td colspan="4" style={this.generate_cell_style(index)}>{this.generate_cell_name(index)}</td>    
+    //     } else {
+    //         return <td style={this.generate_cell_style(index)}>{this.generate_cell_name(index)}</td>
+    //     }
+    // }
+
+    // render_field_lines_description() {
+    //     if ('colors' in this) {
+    //         return (
+    //             <table>
+    //                 <tr>
+    //                     {this.generate_cell(0)}
+    //                 </tr>
+    //                 <tr>
+    //                     {this.generate_cell(1)}
+    //                     {this.generate_cell(2)}
+    //                     {this.generate_cell(3)}
+    //                     {this.generate_cell(4)}
+    //                 </tr>
+    //                 <tr>
+    //                     {this.generate_cell(5)}
+    //                 </tr>
+    //             </table>
+    //         )
+    //     }
+    // }
+
     render() {
         return (
             <div>
+                <div id="annotation-description-container">
+                    {this.renderDescription()}
+                </div>
                 <div id="main-image-container">
                     {/* {this.loadingStatus()} */}
                     {/* Note the 480 x 270 is the 1920 * 1080 ratio */}
-                    <canvas
-                        id="canvas"
-                        className={this.props.prefix + "Canvas"}
-                        width="960"
-                        height="540"
-                    ></canvas>
-                    <div id="hidden-img-container">
-                        {
-                            <img
-                                ref={this.props.prefix + "ImageToLoad"}
-                                style={{ display: "none" }}
-                                src={this.state.imgPath}
-                                onLoad={this.handleImageLoaded}
-                                onError={this.handleImageErrored}
-                            ></img>
-                        }
+                    <div id="canvas-container">
+                        <canvas
+                            id="canvas"
+                            className={this.props.prefix + "Canvas"}
+                            width="960"
+                            height="540"
+                        ></canvas>
+                        <div id="hidden-img-container">
+                            {
+                                <img
+                                    ref={this.props.prefix + "ImageToLoad"}
+                                    style={{ display: "none" }}
+                                    src={this.state.imgPath}
+                                    onLoad={this.handleImageLoaded}
+                                    onError={this.handleImageErrored}
+                                ></img>
+                            }
+                        </div>
                     </div>
                 </div>
                 <div id="annotation-buttons-container">

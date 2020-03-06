@@ -534,7 +534,7 @@ class PlayerBboxImgBlock extends ImgBlock {
         console.log("-----serializeInfo() Start-----");
         console.log("rects: " + this.state.rects);
         var serializedPostData = {};
-        serializedPostData["image_id"] = this.state.imgId;
+        serializedPostData["img_id"] = this.state.imgId;
         serializedPostData["bboxes"] = [];
         for (var i = 0; i < this.state.rects.length; i++) {
             var rect = this.state.rects[i];
@@ -585,6 +585,12 @@ class PlayerBboxImgBlock extends ImgBlock {
             this.handleMouseMove,
             false
         );
+    }
+
+    renderDescription() {
+        return (
+            <p>Draw boxes around each player on the field</p>
+        )
     }
 }
 

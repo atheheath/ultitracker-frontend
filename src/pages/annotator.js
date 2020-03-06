@@ -4,12 +4,14 @@ import PlayerBboxImgBlock from "../components/PlayerBboxImgBlock";
 import FieldLinesImgBlock from "../components/FieldLinesImgBlock";
 import GameplayStateImgBlock from "../components/GameplayStateImgBlock";
 import { Sidebar } from "../components/sidebar";
+import { AnnotatorBar } from "../components/annotator.bar"
 
 class Annotator extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            annotation_table: "player_bbox"
+            annotation_table: "player_bbox",
+            active_game: null
         };
         this.loadFieldLines = this.loadFieldLines.bind(this);
         this.loadPlayerBbox = this.loadPlayerBbox.bind(this);
@@ -68,12 +70,20 @@ class Annotator extends Component {
 
     // componentWillMount() { }
 
+    setActiveGame(activeGame) {
+        this.setState({activeGame: activeGame})
+        console.log("ActiveGame: " + activeGame)
+    }
+
     getImgBlock() {
+        console.log("ImgBlock: getting imgblock")
         if (this.state.annotation_table == "field_lines") {
             return (
                 <FieldLinesImgBlock
                     prefix={this.state.annotation_table}
                     annotation_table={this.state.annotation_table}
+                    cookieAuthenticationKey={this.props.cookieAuthenticationKey}
+                    game_id={this.state.activeGame}
                 />
             );
         } else if (this.state.annotation_table == "player_bbox") {
@@ -81,6 +91,8 @@ class Annotator extends Component {
                 <PlayerBboxImgBlock
                     prefix={this.state.annotation_table}
                     annotation_table={this.state.annotation_table}
+                    cookieAuthenticationKey={this.props.cookieAuthenticationKey}
+                    game_id={this.state.activeGame}
                 />
             );
         } else if (this.state.annotation_table == "gameplay_state") {
@@ -88,6 +100,8 @@ class Annotator extends Component {
                 <GameplayStateImgBlock
                     prefix={this.state.annotation_table}
                     annotation_table={this.state.annotation_table}
+                    cookieAuthenticationKey={this.props.cookieAuthenticationKey}
+                    game_id={this.state.activeGame}
                 />
             );
         }
@@ -97,6 +111,10 @@ class Annotator extends Component {
         return (
             <div id="annotator">
                 <Sidebar />
+                <AnnotatorBar 
+                    cookieAuthenticationKey={this.props.cookieAuthenticationKey}
+                    setActiveGame={(newValue) => this.setActiveGame(newValue)}
+                />
                 <h1>Annotator</h1>
                 <div id="annotator-content">
                     <div id="annotator-content-buttons-container">

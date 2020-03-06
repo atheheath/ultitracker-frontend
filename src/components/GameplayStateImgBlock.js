@@ -110,7 +110,7 @@ class GameplayStateImgBlock extends ImgBlock {
 
     drawImage(doLog = false) {
         super.drawImage();
-        this.drawLegend();
+        // this.drawLegend();
 
         if (doLog) {
             console.log("-----drawImage() End-----");
@@ -118,14 +118,30 @@ class GameplayStateImgBlock extends ImgBlock {
     }
 
     serializeInfo() {
+        if (this.state.isValid === null) {
+            return null
+        }
+        
         console.log("-----serializeInfo() Start-----");
         var serializedPostData = {};
-        serializedPostData["image_id"] = this.state.imgId;
+        serializedPostData["img_id"] = this.state.imgId;
         serializedPostData["is_valid"] = this.state.isValid;
         console.log("isValid " + this.state.isValid);
         console.log("serialized: " + JSON.stringify(serializedPostData));
         console.log("-----serializeInfo() End-----");
         return serializedPostData;
+    }
+
+    renderDescription() {
+        return (
+            <table style={{backgroundColor:"white"}} border="1" rules="cols">
+                <tr>
+                    <td>Is valid Keys: y, &#8674;</td>
+                    <td>Is NOT valid Keys: n, &#8672;</td>
+                    <td>Submit &lt;Space&gt;</td>
+                </tr>
+            </table>
+        )
     }
 }
 
