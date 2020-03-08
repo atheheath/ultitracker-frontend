@@ -118,7 +118,7 @@ class UploadVideoBoxToggle extends React.Component {
     HideButton() {
         if (this.state.display != "none") {
             return (
-                <div>
+                <div id="uploadVideoBoxHideButton">
                     <button onClick={() => {this.toggle()}}>Hide window</button>
                 </div>
             )

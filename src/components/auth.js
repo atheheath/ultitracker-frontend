@@ -31,6 +31,10 @@ function UserException(message) {
     this.name = "UserException"
 }
 
+const pushToHome = (props) => {
+    props.history.push("/");
+}
+
 const urlencodeParams = (params) => {
     var paramsArray = Array()
 
@@ -115,10 +119,19 @@ class Auth {
                 console.log("Received response");
                 return response.ok;
             })
-            .then(() => {
-                console.log("Calling login form callback");
-                callback();
+            .then((is_valid) => {
+                console.log("Returned value")
+                console.log("is_valid: " + is_valid)
+                if (is_valid) {
+                    console.log("Calling login form callback");
+                    callback();
+                    return true;
+                } else {
+                    return false
+                }
             })
+
+        return result;
     }
     
     async addUser(
@@ -144,23 +157,27 @@ class Auth {
                     console.log("Received response");
                     return response.ok;
                 })
-                .then(() => {
-                    console.log("Calling login form callback");
-                    callback();
+                .then((isValid) => {
+                    if (isValid) {
+                        console.log("Calling login form callback");
+                        callback();
+                        return true
+                    }
+                    else {
+                        console.log("Username already exists")
+                        return false
+                    }
                 })
+            
+            return result;
         }
         catch(e) {
             if ((e.name === "UserException") && (e.message === "NonmatchingPasswords")) {
                 console.log("Nonmatching passwords")
             }
-            
-            console.error(e.message, e.name);
+            return e.message
+            // console.error(e.message, e.name);
         }
-    }
-
-    logout(callback) {
-        this.authenticated = false;
-        callback();
     }
 
     async isAuthenticated(cookieAuthenticationKey) {

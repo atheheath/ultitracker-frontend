@@ -81,22 +81,25 @@ class UserInfo extends React.Component {
 
     render() {
         return (
+            // <div id="UserInfo">
+            //     <h1>User Info</h1>
+            //     <table align="center">
+            //         <tr>
+            //             <th>Username</th>
+            //             <th>{this.state.username}</th>
+            //         </tr>
+            //         <tr>
+            //             <th>E-mail</th>
+            //             <th>{this.state.email}</th>
+            //         </tr>
+            //         <tr>
+            //             <th>Full Name</th>
+            //             <th>{this.state.fullName}</th>
+            //         </tr>
+            //     </table>
+            // </div>
             <div id="UserInfo">
-                <h1>User Info</h1>
-                <table align="center">
-                    <tr>
-                        <th>Username</th>
-                        <th>{this.state.username}</th>
-                    </tr>
-                    <tr>
-                        <th>E-mail</th>
-                        <th>{this.state.email}</th>
-                    </tr>
-                    <tr>
-                        <th>Full Name</th>
-                        <th>{this.state.fullName}</th>
-                    </tr>
-                </table>
+                <h1>Welcome {(this.state.fullName === "") ? this.state.username : this.state.fullName}!</h1>
             </div>
         )
     }
@@ -118,7 +121,7 @@ class Explorer extends React.Component {
     render() {
         return (
             <div id="explorer">
-                <Sidebar />
+                <Sidebar {...this.props}/>
                 <div id="explorer-content">
                     <h1>Explorer</h1>
                     <div id="user-info-box">
@@ -141,4 +144,4 @@ class Explorer extends React.Component {
     }
 }
 
-export default Explorer;
+export {Explorer, getUser};

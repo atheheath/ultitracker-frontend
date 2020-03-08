@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "../stylesheets/annotator.css";
 import PlayerBboxImgBlock from "../components/PlayerBboxImgBlock";
 import FieldLinesImgBlock from "../components/FieldLinesImgBlock";
-import GameplayStateImgBlock from "../components/GameplayStateImgBlock";
+import CameraAngleImgBlock from "../components/CameraAngleImgBlock";
 import { Sidebar } from "../components/sidebar";
 import { AnnotatorBar } from "../components/annotator.bar"
 
@@ -15,12 +15,12 @@ class Annotator extends Component {
         };
         this.loadFieldLines = this.loadFieldLines.bind(this);
         this.loadPlayerBbox = this.loadPlayerBbox.bind(this);
-        this.loadGameplayState = this.loadGameplayState.bind(this);
+        this.loadCameraAngle = this.loadCameraAngle.bind(this);
         this.loadNewBlock = this.loadNewBlock.bind(this);
         this.getImgBlock = this.getImgBlock.bind(this);
         this.setFieldLines = this.setFieldLines.bind(this);
         this.setPlayerBbox = this.setPlayerBbox.bind(this);
-        this.setGameplayState = this.setGameplayState.bind(this);
+        this.setCameraAngle = this.setCameraAngle.bind(this);
         this.lastCall = new Date().getTime();
     }
 
@@ -36,10 +36,10 @@ class Annotator extends Component {
             annotation_table: "player_bbox"
         });
     }
-    setGameplayState(table) {
+    setCameraAngle(table) {
         console.log("newTimeout");
         this.setState({
-            annotation_table: "gameplay_state"
+            annotation_table: "camera_angle"
         });
     }
 
@@ -51,8 +51,8 @@ class Annotator extends Component {
             setTimeout(this.setFieldLines, timeout);
         } else if (table == "player_bbox") {
             setTimeout(this.setPlayerBbox, timeout);
-        } else if (table == "gameplay_state") {
-            setTimeout(this.setGameplayState, timeout);
+        } else if (table == "camera_angle") {
+            setTimeout(this.setCameraAngle, timeout);
         }
     }
 
@@ -62,8 +62,8 @@ class Annotator extends Component {
     loadPlayerBbox() {
         this.loadNewBlock("player_bbox");
     }
-    loadGameplayState() {
-        this.loadNewBlock("gameplay_state");
+    loadCameraAngle() {
+        this.loadNewBlock("camera_angle");
     }
 
     // componentDidMount() {   }
@@ -95,9 +95,9 @@ class Annotator extends Component {
                     game_id={this.state.activeGame}
                 />
             );
-        } else if (this.state.annotation_table == "gameplay_state") {
+        } else if (this.state.annotation_table == "camera_angle") {
             return (
-                <GameplayStateImgBlock
+                <CameraAngleImgBlock
                     prefix={this.state.annotation_table}
                     annotation_table={this.state.annotation_table}
                     cookieAuthenticationKey={this.props.cookieAuthenticationKey}
@@ -132,9 +132,9 @@ class Annotator extends Component {
                         </button>
                         <button
                             // class="annotationButton"
-                            onClick={this.loadGameplayState}
+                            onClick={this.loadCameraAngle}
                         >
-                            Gameplay State
+                            Camera Angle
                         </button>
                     </div>
                     {this.getImgBlock()}

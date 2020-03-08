@@ -94,6 +94,9 @@ class GameScrollList extends React.Component {
     constructDivList() {
         var divList = new Array();
         console.log("Gamelist length Div is: " + this.state.gameList.length)
+        if (this.state.gameList.length === 0) {
+            return <p style={{fontSize: "2rem"}}>Upload a game to see it listed here</p>
+        }
         this.state.gameList.forEach((game, index) => {
             divList.push(this.constructGameDiv(game))
         })

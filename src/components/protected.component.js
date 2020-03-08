@@ -47,7 +47,7 @@ class ProtectedComponent extends React.Component {
         } else {
             return (
                 <Redirect to={{
-                    pathname: "/",
+                    pathname: "/protectedInvalidAccess",
                     state: {from: this.props.location}
                 }}/>
             )

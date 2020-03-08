@@ -15,7 +15,7 @@ function log() {
     console.log(initString);
 }
 
-class GameplayStateImgBlock extends ImgBlock {
+class CameraAngleImgBlock extends ImgBlock {
     constructor(props) {
         super(props);
 
@@ -145,4 +145,4 @@ class GameplayStateImgBlock extends ImgBlock {
     }
 }
 
-export default GameplayStateImgBlock;
+export default CameraAngleImgBlock;

@@ -2,9 +2,10 @@ import React from 'react';
 import auth from './auth';
 import "../stylesheets/add.user.box.css";
 
-const isFromProtected = (props) => {
+const isFromFailedAddUser = (props) => {
     if ("from" in props.location) {
-        if (props.location.from.pathname === "/protected") {
+        console.log("props.location: " + props.location.from.pathname)
+        if (props.location.from.pathname === "/failedAddUser") {
             return true;
         }
     }
@@ -13,17 +14,20 @@ const isFromProtected = (props) => {
 }
 
 const addUserMessage = (props) => {
-    if (isFromProtected(props)) {
-        return <p>Please Login</p>
+    if (isFromFailedAddUser(props)) {
+        return <p style={{color: "red"}}>Username already exists</p>
+    }
+    if ("nonmatchingPassword" in props) {
+        return <p style={{color: "red"}}>Passwords do not match</p>
     }
 }
 
 const pushToHome = (props) => {
-    props.history.push("/");
+    props.history.push("/successfulAddUser");
 }
 
-const pushToProtected = (props) => {
-    props.history.push("/protected");
+const pushToFailedAddUser = (props) => {
+    props.history.push("/failedAddUser");
 }
 
 const handleSubmit = (event) => {
@@ -31,22 +35,39 @@ const handleSubmit = (event) => {
     console.log("Add User Submitted")
 }
 
+async function handleAddUser(props) {
+    var password = document.getElementById(props.passwordId).value;
+    var confirmPassword = document.getElementById(props.confirmPasswordId).value;
+    if (password != confirmPassword) {
+        alert("Passwords do not match")
+        return true;
+    }
+
+    var result = await auth.addUser(
+        props.usernameId,
+        props.passwordId,
+        props.confirmPasswordId,
+        props.emailId,
+        props.fullNameId,
+        () => {
+            console.log("Executing addUser callback");
+            pushToHome(props);
+        }
+    )
+
+    console.log("result is " + result)
+    if (!result) {
+        console.log("pushing to failed add user")
+        pushToFailedAddUser(props);
+    }
+}
+
 const AddUserButton = (props) => {
     return (
         <div id="addUserButton">
             <button 
                 onClick={() => {
-                    auth.addUser(
-                        props.usernameId,
-                        props.passwordId,
-                        props.confirmPasswordId,
-                        props.emailId,
-                        props.fullNameId,
-                        () => {
-                            console.log("Executing addUser callback");
-                            pushToHome(props);
-                        }
-                    )
+                    handleAddUser(props)
                 }}
             >
                 Add User
@@ -110,6 +131,7 @@ const AddUserBox = (props) => {
                 emailId="addUserBoxEmailInput"
                 fullNameId="addUserBoxFullNameInput"
             />
+            {addUserMessage(props)}
         </div>
     )
     

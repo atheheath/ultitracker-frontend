@@ -103,7 +103,9 @@ class ViewerContent extends React.Component {
             return (
                 <div id="viewer-content">
                     <h1>Viewer</h1>
-                    <h2>GameId: {this.state.gameInfo.game_id}, Name: {this.state.gameInfo.data.name}</h2>
+                    {/* <h2>GameId: {this.state.gameInfo.game_id}, Name: {this.state.gameInfo.data.name}</h2> */}
+                    <h2>{this.state.gameInfo.data.name}</h2>
+                    <h2>{this.state.gameInfo.data.date}</h2>
                     <div id="video-container">
                         <video id="video-player" controls>
                             {(!this.state.gameInfo.data.video ? null : <source src={this.state.gameInfo.data.video} type="video/mp4"/>)}
