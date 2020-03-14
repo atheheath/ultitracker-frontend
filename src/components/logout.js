@@ -7,25 +7,41 @@ import auth from "./auth";
 class Logout extends React.Component {
     constructor(props) {
         super(props)
+        this.state = {isLoggedOut: null}
+        this.toRender = this.toRender.bind(this)
     }
 
-    componentDidMount() {
-        auth.logout(); 
-        console.log("Overwriting cookie")
-        var cookieSetToValue = this.props.cookieAuthenticationKey + "=None"
-        document.cookie = cookieSetToValue
-        console.log("Cookie set to value: " + cookieSetToValue)
-        console.log(document.cookie)
+    async componentDidMount() {
+        const result = await auth.logout();
+        console.log("logout result: " + result) 
+        this.setState({isLoggedOut: result})
     }
+
+    toRender() {
+        if (this.state.isLoggedOut == null) {
+            return (
+                <div/>
+            )
+        }
+        else {
+            return (
+                <Redirect to={{
+                    pathname: "/",
+                    from: this.props.location,
+                    state: {from: this.props.location}
+                }}/>
+            )
+        }
+    }
+
     render() {
         return (
-            <Redirect to={{
-                pathname: "/",
-                from: this.props.location,
-                state: {from: this.props.location}
-            }}/>
+            <div {...this.props}>
+                {this.toRender()}
+            </div> 
         )
     }
+
 }
 
 export default Logout

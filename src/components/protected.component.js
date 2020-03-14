@@ -21,12 +21,6 @@ class ProtectedComponent extends React.Component {
         this.setState({isAuthenticated: result})
     }
 
-    renderComponent() {
-        return (
-            <this.component {...this.props} myProp="myValue"/>
-        )
-    }
-
     toRender() {
         console.log(this.props)
         console.log(this.component)

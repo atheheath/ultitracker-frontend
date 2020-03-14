@@ -6,6 +6,7 @@ import { GameScrollList } from "../components/game.scroll";
 import { withRouter } from "react-router";
 import "../stylesheets/explorer.css";
 import { UploadVideoBox } from "../components/upload.video.box";
+import { apiURI } from "../Consts"
 
 async function constructUserRequest(cookieAuthenticationKey) {
     var headers = auth.getAuthorizationHeader(cookieAuthenticationKey)
@@ -15,7 +16,7 @@ async function constructUserRequest(cookieAuthenticationKey) {
         credentials: "include"
     }
     const request = new Request(
-        "http://localhost:3001/users/me",
+        apiURI + "/users/me",
         requestInit
     )
 
@@ -81,23 +82,6 @@ class UserInfo extends React.Component {
 
     render() {
         return (
-            // <div id="UserInfo">
-            //     <h1>User Info</h1>
-            //     <table align="center">
-            //         <tr>
-            //             <th>Username</th>
-            //             <th>{this.state.username}</th>
-            //         </tr>
-            //         <tr>
-            //             <th>E-mail</th>
-            //             <th>{this.state.email}</th>
-            //         </tr>
-            //         <tr>
-            //             <th>Full Name</th>
-            //             <th>{this.state.fullName}</th>
-            //         </tr>
-            //     </table>
-            // </div>
             <div id="UserInfo">
                 <h1>Welcome {(this.state.fullName === "") ? this.state.username : this.state.fullName}!</h1>
             </div>

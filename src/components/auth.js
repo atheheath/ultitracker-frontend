@@ -1,3 +1,5 @@
+import { apiURI } from '../Consts'
+
 function parseJwt (token) {
     var base64Url = token.split('.')[1];
     var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -51,7 +53,7 @@ const constructLoginForm = (usernameInputId, passwordInputId) => {
     var username = document.getElementById(usernameInputId).value;
     var password = document.getElementById(passwordInputId).value;
 
-    const request = new Request("http://localhost:3001/token", {
+    const request = new Request(apiURI + "/token", {
         method: "POST",
         credentials: "include",
         headers: {
@@ -83,7 +85,7 @@ const constructAddUserForm = (
         throw new UserException("NonmatchingPasswords");
     }
 
-    const request = new Request("http://localhost:3001/add_user", {
+    const request = new Request(apiURI + "/add_user", {
         method: "POST",
         credentials: "include",
         headers: {
@@ -99,15 +101,16 @@ const constructAddUserForm = (
     return request;
 }
 
+
 class Auth {
 
     getAuthorizationHeader(cookieAuthenticationKey) {
         var myHeaders = new Headers();
         console.log("Document cookie: " + document.cookie);
         const cookieValue = readCookie(document.cookie, cookieAuthenticationKey);
-        myHeaders.set("Authorization", "Bearer " + cookieValue);
+        // myHeaders.set("Authorization", "Bearer " + cookieValue);
+        myHeaders.set("Authorization", "Bearer ");
         myHeaders.set("Accept", "Application/json");
-        myHeaders.set("Credentials", "Include");
         return myHeaders;
     }
 
@@ -122,8 +125,11 @@ class Auth {
             .then((is_valid) => {
                 console.log("Returned value")
                 console.log("is_valid: " + is_valid)
+                console.log("document cokok: " + document.cookie)
                 if (is_valid) {
                     console.log("Calling login form callback");
+                    // need to sleep briefly to allow the cookie to be set before continuing
+                    (async () => {await new Promise(r => setTimeout(r, 10000))})()
                     callback();
                     return true;
                 } else {
@@ -134,6 +140,38 @@ class Auth {
         return result;
     }
     
+    
+    async logout(cookieAuthenticationKey) {
+        var headers = this.getAuthorizationHeader(cookieAuthenticationKey)
+        var requestInit = {
+            method: "POST",
+            headers: headers,
+            credentials: "include"
+        }
+        const request = new Request(
+            apiURI + "/logout",
+            requestInit
+        )
+
+        const result = await fetch(request)
+            .then((response) => {
+                if (!response.ok) {
+                    throw Error("Can't fetch: " + response)
+                }
+                // need to sleep briefly to allow the cookie to be set before continuing
+                (async () => {await new Promise(r => setTimeout(r, 10000))})()
+                return response.ok
+            })
+            .catch((err) => {
+                console.log(err);
+                return false;
+            })
+
+        
+        return result
+    }
+
+
     async addUser(
         usernameInputId, 
         passwordInputId,
@@ -188,7 +226,7 @@ class Auth {
             credentials: "include"
         }
         const request = new Request(
-            "http://localhost:3001/renew_token",
+            apiURI + "/renew_token",
             requestInit
         )
 

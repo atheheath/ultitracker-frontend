@@ -4,6 +4,7 @@ import { Sidebar } from "../components/sidebar";
 import auth from '../components/auth';
 import User from '../components/user';
 import { GameScrollList } from "../components/game.scroll";
+import { apiURI } from '../Consts';
 import "../stylesheets/viewer.css";
 
 const urlencodeParams = (params) => {
@@ -26,7 +27,7 @@ async function getGameRequest(cookieAuthenticationKey, gameId) {
         credentials: "include"
     }
     const request = new Request(
-        "http://localhost:3001/get_game?" + urlencodeParams({
+        apiURI + "/get_game?" + urlencodeParams({
             game_id: gameId
         }),
         requestInit
