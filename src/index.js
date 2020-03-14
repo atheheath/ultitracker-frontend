@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import {
     BrowserRouter,
     Route,
+    Redirect,
     Switch,
     withRouter
 } from "react-router-dom"
@@ -11,11 +12,15 @@ import './stylesheets/index.css';
 import LandingPage from "./pages/landing.page";
 import Protected from "./pages/protected";
 import ProtectedComponent from "./components/protected.component";
-import Explorer from "./pages/explorer";
+import {Explorer} from "./pages/explorer";
 import Viewer from "./pages/viewer";
+import Annotator from "./pages/annotator";
+import AddUserPage from "./pages/add.user.page";
+import Logout from "./components/logout";
 import * as serviceWorker from './serviceWorker';
 
 const cookieAuthenticationKey = "ultitracker-api-access-token";
+
 
 function App() {
     return (
@@ -29,6 +34,60 @@ function App() {
                             cookieAuthenticationKey={cookieAuthenticationKey}
                         />
                     } 
+                />
+                <Route 
+                    exact path="/addUserPage" 
+                    render={(props) => 
+                        <AddUserPage
+                            {...props} 
+                            cookieAuthenticationKey={cookieAuthenticationKey}
+                        />
+                    } 
+                />
+                <Route
+                    exact path="/failedLogin"
+                    render={(props) => 
+                        <Redirect to={{
+                            pathname: "/",
+                            from: props.location
+                        }}/>
+                    }
+                />
+                <Route
+                    exact path="/failedAddUser"
+                    render={(props) => 
+                        <Redirect to={{
+                            pathname: "/addUserPage",
+                            from: props.location
+                        }}/>
+                    }
+                />
+                <Route
+                    exact path="/protectedInvalidAccess"
+                    render={(props) => 
+                        <Redirect to={{
+                            pathname: "/",
+                            from: props.location
+                        }}/>
+                    }
+                />
+                <Route
+                    exact path="/logout"
+                    render={(props) => 
+                        <Logout 
+                            {...props}
+                            cookieAuthenticationKey={cookieAuthenticationKey}
+                        />
+                    }
+                />
+                <Route
+                    exact path="/successfulAddUser"
+                    render={(props) => 
+                        <Redirect to={{
+                            pathname: "/",
+                            from: props.location
+                        }}/>
+                    }
                 />
                 <Route
                     exact path="/protected"
@@ -55,6 +114,15 @@ function App() {
                         <ProtectedComponent
                             {...props}
                             component={withRouter(Viewer)}
+                            cookieAuthenticationKey={cookieAuthenticationKey}
+                        />
+                    }
+                />
+                <Route
+                    path="/annotator"
+                    render={(props) =>
+                        <ProtectedComponent
+                            component={withRouter(Annotator)}
                             cookieAuthenticationKey={cookieAuthenticationKey}
                         />
                     }

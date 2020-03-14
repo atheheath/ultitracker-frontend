@@ -21,12 +21,6 @@ class ProtectedComponent extends React.Component {
         this.setState({isAuthenticated: result})
     }
 
-    renderComponent() {
-        return (
-            <this.component {...this.props} myProp="myValue"/>
-        )
-    }
-
     toRender() {
         console.log(this.props)
         console.log(this.component)
@@ -47,7 +41,7 @@ class ProtectedComponent extends React.Component {
         } else {
             return (
                 <Redirect to={{
-                    pathname: "/",
+                    pathname: "/protectedInvalidAccess",
                     state: {from: this.props.location}
                 }}/>
             )

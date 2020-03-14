@@ -18,6 +18,11 @@
     position: relative;
 }
 
+#addUserBox p {
+    margin: auto;
+    display: block;
+}
+
 #addUserBox form {
     height: 80%;
     width: 100%;

@@ -3,6 +3,7 @@ import "../stylesheets/upload.video.box.css";
 import { tsPropertySignature } from '@babel/types';
 
 import Auth from './auth';
+import { apiURI } from '../Consts'
 
 const handleSubmit = (event) => {
     event.preventDefault();
@@ -40,7 +41,7 @@ class UploadVideoBoxToggle extends React.Component {
 
     uploadFile() {
         let selectedFile = document.getElementById("uploadVideoBoxFileInput").files[0]
-        const uri = "http://localhost:3001/upload_file"
+        const uri = apiURI + "/upload_file"
     
         let formData = new FormData();
     
@@ -118,7 +119,7 @@ class UploadVideoBoxToggle extends React.Component {
     HideButton() {
         if (this.state.display != "none") {
             return (
-                <div>
+                <div id="uploadVideoBoxHideButton">
                     <button onClick={() => {this.toggle()}}>Hide window</button>
                 </div>
             )
@@ -140,7 +141,7 @@ class UploadVideoBoxToggle extends React.Component {
                 <form 
                 id="uploadVideoBoxForm"
                 method="post" 
-                action="http://localhost:3001/upload_file"
+                action={apiURI + "/upload_file"}
                 enctype="multipart/form-data"
                 required
                 >

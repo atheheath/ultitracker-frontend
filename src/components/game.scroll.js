@@ -2,6 +2,7 @@ import React from 'react';
 import auth from './auth';
 import User from './user';
 import { Link } from "react-router-dom"
+import { apiURI } from '../Consts'
 
 import "../stylesheets/game.scroll.css";
 
@@ -14,7 +15,7 @@ async function getGameListRequest(cookieAuthenticationKey) {
         credentials: "include"
     }
     const request = new Request(
-        "http://localhost:3001/get_game_list",
+        apiURI + "/get_game_list",
         requestInit
     )
 
@@ -56,7 +57,7 @@ class GameScrollList extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            gameList: new Array()
+            gameList: null
         }
 
         this.constructGameDiv = this.constructGameDiv.bind(this);
@@ -93,10 +94,17 @@ class GameScrollList extends React.Component {
     
     constructDivList() {
         var divList = new Array();
-        console.log("Gamelist length Div is: " + this.state.gameList.length)
-        this.state.gameList.forEach((game, index) => {
-            divList.push(this.constructGameDiv(game))
-        })
+        if (this.state.gameList != null) {    
+            console.log("Gamelist length Div is: " + this.state.gameList.length)
+            if (this.state.gameList.length === 0) {
+                return <p style={{fontSize: "2rem"}}>Upload a game to see it listed here</p>
+            }
+            this.state.gameList.forEach((game, index) => {
+                divList.push(this.constructGameDiv(game))
+            })
+        } else {
+            return <div/>
+        }
 
         return divList;
     }
@@ -111,4 +119,4 @@ class GameScrollList extends React.Component {
     }
 }
 
-export { GameScrollList };
+export { GameScrollList, getGameList };

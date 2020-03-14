@@ -4,6 +4,7 @@ import { Sidebar } from "../components/sidebar";
 import auth from '../components/auth';
 import User from '../components/user';
 import { GameScrollList } from "../components/game.scroll";
+import { apiURI } from '../Consts';
 import "../stylesheets/viewer.css";
 
 const urlencodeParams = (params) => {
@@ -26,7 +27,7 @@ async function getGameRequest(cookieAuthenticationKey, gameId) {
         credentials: "include"
     }
     const request = new Request(
-        "http://localhost:3001/get_game?" + urlencodeParams({
+        apiURI + "/get_game?" + urlencodeParams({
             game_id: gameId
         }),
         requestInit
@@ -103,7 +104,9 @@ class ViewerContent extends React.Component {
             return (
                 <div id="viewer-content">
                     <h1>Viewer</h1>
-                    <h2>GameId: {this.state.gameInfo.game_id}, Name: {this.state.gameInfo.data.name}</h2>
+                    {/* <h2>GameId: {this.state.gameInfo.game_id}, Name: {this.state.gameInfo.data.name}</h2> */}
+                    <h2>{this.state.gameInfo.data.name}</h2>
+                    <h2>{this.state.gameInfo.data.date}</h2>
                     <div id="video-container">
                         <video id="video-player" controls>
                             {(!this.state.gameInfo.data.video ? null : <source src={this.state.gameInfo.data.video} type="video/mp4"/>)}
