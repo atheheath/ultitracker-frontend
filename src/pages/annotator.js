@@ -21,6 +21,7 @@ class Annotator extends Component {
         this.setFieldLines = this.setFieldLines.bind(this);
         this.setPlayerBbox = this.setPlayerBbox.bind(this);
         this.setCameraAngle = this.setCameraAngle.bind(this);
+        this.getActiveAnnotationStyle = this.getActiveAnnotationStyle.bind(this);
         this.lastCall = new Date().getTime();
     }
 
@@ -107,6 +108,16 @@ class Annotator extends Component {
         }
     }
 
+    getActiveAnnotationStyle(table_name) {
+        if (this.state.annotation_table === table_name) {
+            return {
+                backgroundColor: "green",
+                color: "white"
+            }
+        }
+        return {}
+    }
+
     render() {
         return (
             <div id="annotator">
@@ -119,18 +130,21 @@ class Annotator extends Component {
                 <div id="annotator-content">
                     <div id="annotator-content-buttons-container">
                         <button
+                            style={this.getActiveAnnotationStyle("player_bbox")}
                             // class="annotationButton"
                             onClick={this.loadPlayerBbox}
                         >
                             Player Bbox
                         </button>
                         <button
+                            style={this.getActiveAnnotationStyle("field_lines")}
                             // class="annotationButton"
                             onClick={this.loadFieldLines}
                         >
                             Field Lines
                         </button>
                         <button
+                            style={this.getActiveAnnotationStyle("camera_angle")}
                             // class="annotationButton"
                             onClick={this.loadCameraAngle}
                         >
@@ -139,7 +153,7 @@ class Annotator extends Component {
                     </div>
                     {this.getImgBlock()}
                 </div>
-                <h1>Annotation table is {this.state.annotation_table}</h1>
+                {/* <h1>Annotation table is {this.state.annotation_table}</h1> */}
                 {/* <main>{this.props.children}</main> */}
             </div>
         );

@@ -98,14 +98,14 @@
     box-sizing: border-box;
 }
 
-#serialize-info-button {
+/* #serialize-info-button {
     background-color: red;
-}
+} */
 
 #post-annotation-button {
-    background-color: green;
-}
-
-#refresh-interval-button {
     background-color: white;
 }
+
+/* #refresh-interval-button {
+    background-color: white;
+} */

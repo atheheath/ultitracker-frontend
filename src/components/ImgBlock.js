@@ -35,7 +35,7 @@ class ImgBlock extends Component {
         //   relative to the image (proportional)
 
         const defaultState = {
-            imageStatus: "loading",
+            imageStatus: "Please select game to annotate",
             x_center: 0.5,
             y_center: 0.5,
             scale: 1,
@@ -48,6 +48,7 @@ class ImgBlock extends Component {
         this.state = defaultState;
         this.defaultState = defaultState;
 
+        this.handleEmptyImagePath = this.handleEmptyImagePath.bind(this);
         this.handleImageErrored = this.handleImageErrored.bind(this);
         this.handleImageLoaded = this.handleImageLoaded.bind(this);
         this.handleKeyPress = this.handleKeyPress.bind(this);
@@ -59,6 +60,7 @@ class ImgBlock extends Component {
         this.drawTimer = this.drawTimer.bind(this);
         this.convertMS = this.convertMS.bind(this);
 
+        this.getHiddenImageContainer = this.getHiddenImageContainer.bind(this);
         this.getImage = this.getImage.bind(this);
         this.getMainImageContainer = this.getMainImageContainer.bind(this);
         this.getCanvas = this.getCanvas.bind(this);
@@ -425,6 +427,26 @@ class ImgBlock extends Component {
             centeredX,
             centeredY + context.measureText("M").width
         );
+        console.log("handleImageErrored called")
+    }
+
+    handleEmptyImagePath() {
+        var canvas = this.getCanvas();
+        var context = this.getCanvasContext();
+        console.log("Empty image path");
+        context.fillStyle = "black";
+        context.font = "24px Arial";
+        context.textAlign = "center";
+        var centeredX = 0.5 * canvas.width;
+        var centeredY = 0.5 * canvas.height;
+        var topErrorMessage = "Empty Image Path";
+        var bottomErrorMessage = "Reason: " + this.state.errorCause;
+        context.fillText(topErrorMessage, centeredX, centeredY);
+        context.fillText(
+            bottomErrorMessage,
+            centeredX,
+            centeredY + context.measureText("M").width
+        );
     }
 
     convertMS(milliseconds) {
@@ -535,6 +557,7 @@ class ImgBlock extends Component {
     }
 
     async getImagesToAnnotate(game_ids, annotation_type, order_type) {
+        this.setState({imageStatus: "loading"})
         order_type = "random"
         console.log("getting Images To annotate")
         var uri =
@@ -670,7 +693,8 @@ class ImgBlock extends Component {
         this.setState({
             imgPath: img_path,
             imgId: img_id,
-            annotationExpirationUTCTime: serverExpTime
+            annotationExpirationUTCTime: serverExpTime,
+            imageStatus: "loaded"
         });
 
         clearInterval(this.timer);
@@ -682,18 +706,25 @@ class ImgBlock extends Component {
             this.drawImage();
             // this.drawTimer();
         }, 1000);
+
     }
 
     setBlankImageState() {
-        this.setState({ imgPath: "", imgId: "", isStale: true });
-        clearInterval(this.timer);
         this.clearImage();
+        this.setState({ imgPath: null, imgId: "", isStale: true });
+        clearInterval(this.timer);
         // this.removeEventListeners();
         log("Event listeners removed");
     }
 
     getNextImage() {
         // Use this to use promises for loading images
+        if (this.props.game_id == null) {
+            return
+        }
+        if (this.props.game_id.length === 0) {
+            return
+        }
         var result = this.getImagesToAnnotate(
             Array(this.props.game_id), 
             this.props.annotation_table,
@@ -702,10 +733,18 @@ class ImgBlock extends Component {
             .then(
                 imagesToAnnotate => {
                     log("imagesToAnnotate", imagesToAnnotate);
-                    this.setNewImageState(imagesToAnnotate.img_locations[0]);
+                    if (imagesToAnnotate.img_locations.length === 0) {
+                        this.setState({imageStatus: "No more images to annotate"})
+                        this.setBlankImageState()
+                        this.setState({ errorCause: "No more images to annotate" })
+                    }
+                    else {
+                        this.setNewImageState(imagesToAnnotate.img_locations[0]);
+                    }
                 },
                 error => {
                     if (!this.state.firstInitialized) {
+                        this.setState({imageStatus: "loaded"})
                         log("Error in fetching image to annotate");
                         log("Error", error.message);
                         this.setBlankImageState();
@@ -834,9 +873,18 @@ class ImgBlock extends Component {
                 this.props.order_type
             )
                 .then(imagesToAnnotate => {
-                    this.setNewImageState(imagesToAnnotate.img_locations[0]);
+                    
+                    if (imagesToAnnotate.img_locations.length === 0) {
+                        this.setState({imageStatus: "No more images to annotate"})
+                        log("No images to annotate")
+                        this.setState({ errorCause: "No images to annotate" })
+                        this.setBlankImageState();
+                    } else {
+                        this.setNewImageState(imagesToAnnotate.img_locations[0]);
+                    }
                 })
                 .catch(error => {
+                    this.setState({imageStatus: "loaded"})
                     this.setBlankImageState();
                     this.setState({ errorCause: error });
                 });
@@ -882,6 +930,40 @@ class ImgBlock extends Component {
     //     }
     // }
 
+    getHiddenImageContainer() {
+        // if ("imgPath" in this.state) {
+        //     if (this.state.imgPsath != null) {
+        //         return (
+        //             <div id="hidden-img-container">
+        //                 {
+        //                     <img
+        //                         ref={this.props.prefix + "ImageToLoad"}
+        //                         style={{ display: "none" }}
+        //                         src={this.state.imgPath}
+        //                         onLoad={this.handleImageLoaded}
+        //                         onError={this.handleImageErrored}
+        //                     ></img>
+        //                 }
+        //             </div>
+        //         )
+        //     } 
+        // }
+        return (
+            <div id="hidden-img-container">
+                {
+                    <img
+                        ref={this.props.prefix + "ImageToLoad"}
+                        style={{ display: "none" }}
+                        src={this.state.imgPath}
+                        alt="Loading Image"
+                        onLoad={this.handleImageLoaded}
+                        onError={this.handleImageErrored}
+                    ></img>
+                }
+            </div>
+        )
+    }
+
     render() {
         return (
             <div>
@@ -889,7 +971,7 @@ class ImgBlock extends Component {
                     {this.renderDescription()}
                 </div>
                 <div id="main-image-container">
-                    {/* {this.loadingStatus()} */}
+                    {this.loadingStatus()}
                     {/* Note the 480 x 270 is the 1920 * 1080 ratio */}
                     <div id="canvas-container">
                         <canvas
@@ -898,26 +980,16 @@ class ImgBlock extends Component {
                             width="960"
                             height="540"
                         ></canvas>
-                        <div id="hidden-img-container">
-                            {
-                                <img
-                                    ref={this.props.prefix + "ImageToLoad"}
-                                    style={{ display: "none" }}
-                                    src={this.state.imgPath}
-                                    onLoad={this.handleImageLoaded}
-                                    onError={this.handleImageErrored}
-                                ></img>
-                            }
-                        </div>
+                        {this.getHiddenImageContainer()}
                     </div>
                 </div>
                 <div id="annotation-buttons-container">
-                    <button
+                    {/* <button
                         id="serialize-info-button"
                         onClick={this.serializeInfo}
                     >
                         Serialize
-                    </button>
+                    </button> */}
             
                     <button
                         id="post-annotation-button"
@@ -926,12 +998,12 @@ class ImgBlock extends Component {
                         PostAnnotation
                     </button>
             
-                    <button
+                    {/* <button
                         id="refresh-interval-button"
                         onClick={this.refreshAnnotationInterval}
                     >
                         Refresh Interval
-                    </button>
+                    </button> */}
                 </div>
             </div>
         );
