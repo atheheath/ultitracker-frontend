@@ -118,6 +118,7 @@ const LoginButton = (props) => {
                 onClick={() => {
                     handleLogin(props)
                 }}
+                tabIndex="0"
             >
                 Login
             </button>
@@ -132,6 +133,7 @@ const AddUserButton = (props) => {
                 onClick={() => {
                     pushtoAddUser(props)
                 }}
+                tabIndex="0"
             >
                 Add User
             </button>
@@ -153,6 +155,7 @@ const LoginBox = (props) => {
                         id="loginBoxUsernameInput" 
                         name="username" 
                         placeholder="username"
+                        tabIndex="0"
                     ></input>
                 </div>
                 <div id="loginBoxPassword">
@@ -161,6 +164,7 @@ const LoginBox = (props) => {
                         name="password" 
                         placeholder="password"
                         type="password"
+                        tabIndex="0"
                     ></input>
                 </div>
             </form>
