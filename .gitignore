@@ -2,3 +2,5 @@ node_modules/*
 letsencrypt/*
 .vscode/*
 build/*
+*.pem
+*.config

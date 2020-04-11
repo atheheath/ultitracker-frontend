@@ -40,6 +40,7 @@ class FieldLinesImgBlock extends ImgBlock {
             "#769d31",
             "#330045"
         ];
+        this.activeAlphaHex = "4D"
         this.squareDimCanvasX = 0.02;
         this.handleMouseDown = this.handleMouseDown.bind(this);
         this.handleMouseUp = this.handleMouseUp.bind(this);
@@ -620,7 +621,7 @@ class FieldLinesImgBlock extends ImgBlock {
                     lseg["x2"],
                     lseg["y2"],
                     {
-                        color: this.colors[segmentIndex],
+                        color: this.colors[segmentIndex] + this.activeAlphaHex, // add 50% alpha channel for active segment
                         lineWidth: 10,
                         doLog: doLog
                     }
@@ -631,7 +632,7 @@ class FieldLinesImgBlock extends ImgBlock {
                     lseg["x2"],
                     lseg["y2"],
                     {
-                        color: this.colors[segmentIndex],
+                        color: this.colors[segmentIndex] + this.activeAlphaHex,
                         lineWidth: 10,
                         doLog: doLog
                     }
@@ -663,7 +664,7 @@ class FieldLinesImgBlock extends ImgBlock {
                 lseg["x2"],
                 lseg["y2"],
                 {
-                    color: this.colors[this.state.activeSegment],
+                    color: this.colors[this.state.activeSegment] + this.activeAlphaHex, // add alpha channel
                     lineWidth: 10,
                     doLog: doLog
                 }
