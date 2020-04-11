@@ -4,7 +4,7 @@ import { fieldLinesNames, imgRootPath, vizserverURI } from "../Consts";
 import auth from './auth'
 import "../stylesheets/ImgBlock.css"
 
-const eps = Number(0.1);
+const eps = Number(0.5);
 
 class HttpError extends Error {
     // (1)
@@ -100,14 +100,20 @@ class ImgBlock extends Component {
 
     decreaseScale() {
         if (Number(this.state.scale) > 0.1 + eps) {
-            var newImageScale = this.state.scale - 0.1;
+            var newImageScale = Math.pow(
+                2.0,
+                Math.log2(this.state.scale) - 0.1
+            );
             this.setState({ scale: newImageScale });
         }
     }
 
     increaseScale() {
-        if (Number(this.state.scale) < 2 - eps) {
-            var newImageScale = this.state.scale + 0.1;
+        if (Number(this.state.scale) < 32 - eps) {
+            var newImageScale = Math.pow(
+                2.0,
+                Math.log2(this.state.scale) + 0.1
+            )
             this.setState({ scale: newImageScale });
         }
     }
