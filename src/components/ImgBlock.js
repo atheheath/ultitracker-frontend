@@ -349,16 +349,16 @@ class ImgBlock extends Component {
 
     handleKeyPress(e) {
         if (e.keyCode === 37) {
-            this.panLeft();
+            this.panRight();
             console.log("Hit Left!");
         } else if (e.keyCode === 39) {
-            this.panRight();
+            this.panLeft();
             console.log("Hit Right!");
         } else if (e.keyCode === 38) {
-            this.panUp();
+            this.panDown();
             console.log("Hit Up!");
         } else if (e.keyCode === 40) {
-            this.panDown();
+            this.panUp();
             console.log("Hit Down!");
         } else if (e.keyCode === 173 || e.keyCode === 189) {
             this.decreaseScale();
