@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import { fieldLinesNames, imgRootPath, vizserverURI } from "../Consts";
-// import Auth from "./auth"
 import auth from './auth'
 import "../stylesheets/ImgBlock.css"
 
-const eps = Number(0.5);
+const eps = Number(0.1);
 
 class HttpError extends Error {
     // (1)
