@@ -1,3 +1,18 @@
+# Deploy process
+
+To create the zip to upload to elastic beanstalk
+```
+./scripts/elastic-beanstalk/create_eb_zip.sh ${ROOT_DIR} ${ZIP_PATH}
+```
+
+If changing environment, use the following
+```
+./scripts/create-environment.sh
+```
+
+
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
