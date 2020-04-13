@@ -104,7 +104,9 @@ class ImgBlock extends Component {
                 Math.log2(this.state.scale) - 0.1
             );
             this.setState({ scale: newImageScale });
+            return newImageScale
         }
+        return this.state.scale
     }
 
     increaseScale() {
@@ -114,7 +116,9 @@ class ImgBlock extends Component {
                 Math.log2(this.state.scale) + 0.1
             )
             this.setState({ scale: newImageScale });
+            return newImageScale
         }
+        return this.state.scale
     }
 
     panLeft() {
@@ -351,21 +355,33 @@ class ImgBlock extends Component {
         if (e.keyCode === 37) {
             this.panRight();
             console.log("Hit Left!");
+            // block page from scrolling
+            e.preventDefault();
         } else if (e.keyCode === 39) {
             this.panLeft();
             console.log("Hit Right!");
+            // block page from scrolling
+            e.preventDefault();
         } else if (e.keyCode === 38) {
             this.panDown();
             console.log("Hit Up!");
+            // block page from scrolling
+            e.preventDefault();
         } else if (e.keyCode === 40) {
             this.panUp();
             console.log("Hit Down!");
+            // block page from scrolling
+            e.preventDefault();
         } else if (e.keyCode === 173 || e.keyCode === 189) {
             this.decreaseScale();
             console.log("Hit Minus!");
+            // block page from scrolling
+            e.preventDefault();
         } else if (e.keyCode === 61 || e.keyCode === 187) {
             this.increaseScale();
             console.log("Hit Equals!");
+            // block page from scrolling
+            e.preventDefault();
         }
         log("Key was pressed");
         this.drawImage();
@@ -373,13 +389,48 @@ class ImgBlock extends Component {
 
     handleWheel(e) {
         if (this.state.mouseIsOver) {
+            var currentScale = this.state.scale
+            var newScale = currentScale + 0.
             if (e.deltaY > 0) {
-                this.decreaseScale();
+                newScale = this.decreaseScale();
             } else if (e.deltaY < 0) {
-                this.increaseScale();
+                newScale = this.increaseScale();
             }
             // block page from scrolling
             e.preventDefault();
+
+            var deltaX = 1. + (newScale - currentScale)
+            var deltaY = 1. + (newScale - currentScale)
+            var mouseLocCanvas = this.getMouseLocationCanvas(e);
+            
+            var currentCenter = this.coordImageToCanvas(
+                this.state.x_center,
+                this.state.y_center
+            );
+
+            var prevCanvasXDelta = mouseLocCanvas["x"] - 0.5
+            var prevCanvasYDelta = mouseLocCanvas["y"] - 0.5
+            var canvasXDelta = (mouseLocCanvas["x"] - 0.5) * deltaX
+            var canvasYDelta = (mouseLocCanvas["y"] - 0.5) * deltaY
+            var newXCenter = canvasXDelta - prevCanvasXDelta + .5
+            var newYCenter = canvasYDelta - prevCanvasYDelta + .5
+            var newCenter = this.coordCanvasToImage(
+                newXCenter,
+                newYCenter
+            );
+            // log("mouseLocCanvas", mouseLocCanvas["x"], mouseLocCanvas["y"])
+            // log("currentCenter", currentCenter["x"], currentCenter["y"])
+            // log("delta", deltaX, deltaY)
+            // log("canvasDelta", canvasXDelta, canvasYDelta)
+            // log("newCanvasCenter", newXCenter, newYCenter)
+            // log("newCenter", newCenter["x"], newCenter["y"])
+            
+            // console.log("newCenter['x'] " + newCenter["x"]);
+            this.setState({
+                x_center: newCenter["x"],
+                y_center: newCenter["y"]
+            });
+
         }
         this.drawImage();
     }
