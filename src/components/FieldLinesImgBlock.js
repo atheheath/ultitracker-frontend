@@ -38,7 +38,10 @@ class FieldLinesImgBlock extends ImgBlock {
             "#37c454",
             "#eb67f9",
             "#769d31",
-            "#330045"
+            "#330045",
+            "#1b9e77",
+            "#d95f02",
+            "#7570b3"
         ];
         this.activeAlphaHex = "4D"
         this.squareDimCanvasX = 0.02;
@@ -746,8 +749,10 @@ class FieldLinesImgBlock extends ImgBlock {
     }
 
     generate_cell(index) {
-        if (index == 0 || index == 5) {
+        if (index == 0 || index == 5 || index == 6) {
             return <td colspan="4" style={this.generate_cell_style(index)}>{this.generate_cell_name(index)}</td>    
+        } else if (index == 7 || index == 8) {
+            return <td colspan="2" style={this.generate_cell_style(index)}>{this.generate_cell_name(index)}</td>    
         } else {
             return <td style={this.generate_cell_style(index)}>{this.generate_cell_name(index)}</td>
         }
@@ -767,6 +772,13 @@ class FieldLinesImgBlock extends ImgBlock {
                 </tr>
                 <tr>
                     {this.generate_cell(5)}
+                </tr>
+                <tr>
+                    {this.generate_cell(6)}
+                </tr>
+                <tr>
+                    {this.generate_cell(7)}
+                    {this.generate_cell(8)}
                 </tr>
             </table>
         )
